@@ -34,12 +34,13 @@ class Genomes:
     def getGenomesAsList(self):
         return list(self.genomes.values())
 
-    def print(self):
+    def __str__(self):
+        result = ""
         for genome in self.getGenomesAsList():
-            print('>', genome.name)
+            result += '>' + str(genome.name)
             for protein in genome.getProteinsAsList():
-                print('>>', protein.name, protein.sequence)
-
+                result += '>>' + str(protein.name) + "\n" + str(protein.sequence)
+        return result
 
 def getProteinName(record):
     proteinName = record.description.split('|')[1]
@@ -62,6 +63,7 @@ def parseFasta(name):
             protein = Protein(proteinName, record.seq)
             genomeID = getGenomeID(record)
             genomes.getGenome(genomeID).addProtein(protein)
+    
     return genomes
 
 

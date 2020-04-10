@@ -1,7 +1,7 @@
 from phylo_proteins.fasta import parseFasta
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio.SeqIO import MultipleSeqAlignment
-from Bio.Phylo import draw as drawTree
+from Bio.Phylo import draw as drawTree, draw_ascii
 import matplotlib.pyplot as plt
 
 
@@ -30,7 +30,7 @@ def getProteinSequences(genomes, proteinName):
         if sequence not in sequencesUsed:
             alignment.add_sequence(genome.name, sequence)
             sequencesUsed.add(sequence)
-
+    print(alignment)
     return alignment
 
 
@@ -40,4 +40,5 @@ def constructTree(alignment: MultipleSeqAlignment):
     constructor = DistanceTreeConstructor(calculator, 'nj')
     tree = constructor.build_tree(alignment)
     tree.ladderize()
+    # draw_ascii(tree)
     return tree

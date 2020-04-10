@@ -1,3 +1,5 @@
 from phylo_proteins.main import generateProteinPhylo
 
-generateProteinPhylo('../data/sequences_all.fasta', 'surface glycoprotein')
+
+if __name__ == '__main__':
+	generateProteinPhylo('./data/sequences_all.fasta', 'surface glycoprotein')
