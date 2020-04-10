@@ -1,0 +1,23 @@
+.navbar{
+    background-color: ghostwhite;
+    min-height: 4rem;
+    align-content: center;
+}
+
+.navbar-item img{
+    max-height: 2.9rem;
+}
+
+.navbar-item{
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+.navbar-menu{
+    text-align: center;
+}
+
+.description{
+    color: lightgray;
+    font-style: italic;
+}

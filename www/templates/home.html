@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sequence Alignment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/universal.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../static/js/home.js"></script>
+  </head>
+  <body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="container">
+      <a class="navbar-item">
+        <img src="static/bacteria.png">
+      </a>
+
+      <div class="navbar-menu">
+        <a class="navbar-item">Home</a>
+        <a class="navbar-item">Features</a>
+        <a class="navbar-item">Project</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <section id="menu-choices" class="section">
+    <div class="container">
+      <h1 class="title">Sequence Alignment</h1>
+
+      <span class="description">Choose or upload a sequence to allign:</span>
+      <div class="columns">
+        <div class="column is-four-fifths is-desktop">
+          <div class="field">
+            <div class="control is-medium is-loading">
+              <textarea class="textarea is-medium" placeholder="Sequence Input"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <div class="control has-icons-left">
+              <div class="select is-rounded">
+                <select>
+                  <option>Sequence 1</option>
+                  <option>Sequence 2</option>
+                  <option>Sequence 3</option>
+                </select>
+              </div>
+              <div class="icon is-small is-left">
+                <i class="fas fa-dna"></i>
+              </div>
+            </div>
+          </div>
+          <div id="upload-zone" class="">
+            <div class="file has-name is-boxed">
+              <label class="file-label">
+                <input class="file-input" type="file" name="resume">
+                <span class="file-cta">
+                  <span class="file-icon"><i class="fas fa-upload"></i></span>
+                  <span class="file-label">Choose a file…</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <span class="description">Alignment Options:</span>
+      <div class="container"></div>
+      <span class="description">Output Options:</span>
+      <div class="container"></div>
+      <div class="field">
+        <p class="control">
+          <button class="button is-primary">Analyze</button>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const fileInput = document.querySelector('#file-js-example input[type=file]');
+    fileInput.onchange = () => {
+      if (fileInput.files.length > 0) {
+        const fileName = document.querySelector('#file-js-example .file-name');
+        fileName.textContent = fileInput.files[0].name;
+      }
+    }
+  </script>
+
+  </body>
+</html>
