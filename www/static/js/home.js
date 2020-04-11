@@ -30,3 +30,8 @@ function populateSequenceChoices() {
     }
     //TODO show in text area
 }
+
+function addProgressBar() {
+    let div = document.getElementById("progress-bar-div")
+
+}

@@ -34,6 +34,7 @@
         <span class="description">Choose or upload a sequence to allign:</span>
         <form action="http://localhost:5000/submit-data" method="POST" enctype="multipart/form-data">
           <div class="columns">
+
             <div class="column is-four-fifths is-desktop">
               <div class="field">
                 <div class="control is-medium is-loading">  <!-- TODO loading for checking input -->
@@ -45,6 +46,7 @@
             </div>
 
             <div class="column">
+
               <div class="field">
                 <div class="control has-icons-left">
                   <div class="select is-rounded">
@@ -60,6 +62,7 @@
                   </div>
                 </div>
               </div>
+
               <div id="upload-zone" class="">
                 <div class="file has-name is-boxed">
                   <label class="file-label">
@@ -72,6 +75,7 @@
                   </label>
                 </div>
               </div>
+
             </div>
 
           </div>
@@ -85,6 +89,7 @@
             </label>
           </div>
           <br>
+
           <span class="description">Output Options:</span>
           <div class="container">
             <label class="checkbox">
@@ -96,29 +101,32 @@
           <br>
           <div class="field">
             <p class="control">
-              <button class="button is-primary" type="submit">Analyze</button>
+              <button class="button is-primary" type="submit" onclick="addProgressBar()">Analyze</button>
             </p>
           </div>
 
+          <div id="progress-bar-div"></div>
+
         </form>
-
-
-  <!--      <form action="http://localhost:5000/upload" method="POST" enctype="multipart/form-data">
-           <input type = "file" name = "file" />
-           <input type = "submit"/>
-        </form>-->
-
         </div>
 
         <div class="column is-half">
           <div class="centered-img">
-            <img src="../static/spike-phylo.png">
+            <img src="{{ phylo_image }}">
           </div>
         </div>
 
       </div>
   </section>
   </div>
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>© Universiteit Antwerpen</p>
+      <p class="description">Astrid Lamens, Max Van Houcke, Miguel Dagrain, Thomas Van Onsem</p>
+    </div>
+  </footer>
+
   </body>
 </html>
 
