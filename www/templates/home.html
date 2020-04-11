@@ -11,86 +11,123 @@
     <script src="../static/js/home.js"></script>
   </head>
   <body>
+
+  <div class="container-fluid">
   <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="container">
       <a class="navbar-item">
         <img src="static/bacteria.png">
       </a>
 
       <div class="navbar-menu">
         <a class="navbar-item">Home</a>
-        <a class="navbar-item">Features</a>
-        <a class="navbar-item">Project</a>
+        <a class="navbar-item" href="http://localhost:5000/features">Features</a>
+        <a class="navbar-item" href="https://github.com/ThomasVanOnsem/SARS-CoV-2-Phylogeny">Project</a>
       </div>
 
-    </div>
   </nav>
 
-  <section id="menu-choices" class="section">
-    <div class="container">
+  <section class="section">
+
       <h1 class="title">Sequence Alignment</h1>
-
-      <span class="description">Choose or upload a sequence to allign:</span>
       <div class="columns">
-        <div class="column is-four-fifths is-desktop">
-          <div class="field">
-            <div class="control is-medium is-loading">
-              <textarea class="textarea is-medium" placeholder="Sequence Input"></textarea>
+        <div class="column is-half">
+        <span class="description">Choose or upload a sequence to allign:</span>
+        <form action="http://localhost:5000/submit-data" method="POST" enctype="multipart/form-data">
+          <div class="columns">
+            <div class="column is-four-fifths is-desktop">
+              <div class="field">
+                <div class="control is-medium is-loading">  <!-- TODO loading for checking input -->
+                  <label>
+                    <textarea class="textarea is-medium" placeholder="Sequence Input" name="sequence-text"></textarea>
+                  </label>
+                </div>
+              </div>
             </div>
+
+            <div class="column">
+              <div class="field">
+                <div class="control has-icons-left">
+                  <div class="select is-rounded">
+                    <select id="sequence-choices">
+                      <option selected="selected">None</option>
+                      <option>Sequence 1</option>
+                      <option>Sequence 2</option>
+                      <option>Sequence 3</option>
+                    </select>
+                  </div>
+                  <div class="icon is-small is-left">
+                    <i class="fas fa-dna"></i>
+                  </div>
+                </div>
+              </div>
+              <div id="upload-zone" class="">
+                <div class="file has-name is-boxed">
+                  <label class="file-label">
+                    <input class="file-input" type="file" name="file">
+                    <span class="file-cta">
+                      <span class="file-icon"><i class="fas fa-upload"></i></span>
+                      <span class="file-label">Choose a file…</span>
+                    </span>
+                    <span class="file-name"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
           </div>
+
+          <span class="description">Alignment Options:</span>
+          <div class="container">
+            <label class="checkbox">
+              <input type="checkbox"> Option 1
+              <input type="checkbox"> Option 2
+              <input type="checkbox"> Option 3
+            </label>
+          </div>
+          <br>
+          <span class="description">Output Options:</span>
+          <div class="container">
+            <label class="checkbox">
+              <input type="checkbox"> Option 1
+              <input type="checkbox"> Option 2
+              <input type="checkbox"> Option 3
+            </label>
+          </div>
+          <br>
+          <div class="field">
+            <p class="control">
+              <button class="button is-primary" type="submit">Analyze</button>
+            </p>
+          </div>
+
+        </form>
+
+
+  <!--      <form action="http://localhost:5000/upload" method="POST" enctype="multipart/form-data">
+           <input type = "file" name = "file" />
+           <input type = "submit"/>
+        </form>-->
+
         </div>
 
-        <div class="column">
-          <div class="field">
-            <div class="control has-icons-left">
-              <div class="select is-rounded">
-                <select>
-                  <option>Sequence 1</option>
-                  <option>Sequence 2</option>
-                  <option>Sequence 3</option>
-                </select>
-              </div>
-              <div class="icon is-small is-left">
-                <i class="fas fa-dna"></i>
-              </div>
-            </div>
-          </div>
-          <div id="upload-zone" class="">
-            <div class="file has-name is-boxed">
-              <label class="file-label">
-                <input class="file-input" type="file" name="resume">
-                <span class="file-cta">
-                  <span class="file-icon"><i class="fas fa-upload"></i></span>
-                  <span class="file-label">Choose a file…</span>
-                </span>
-              </label>
-            </div>
+        <div class="column is-half">
+          <div class="centered-img">
+            <img src="../static/spike-phylo.png">
           </div>
         </div>
 
       </div>
-
-      <span class="description">Alignment Options:</span>
-      <div class="container"></div>
-      <span class="description">Output Options:</span>
-      <div class="container"></div>
-      <div class="field">
-        <p class="control">
-          <button class="button is-primary">Analyze</button>
-        </p>
-      </div>
-    </div>
   </section>
-
-  <script>
-    const fileInput = document.querySelector('#file-js-example input[type=file]');
-    fileInput.onchange = () => {
-      if (fileInput.files.length > 0) {
-        const fileName = document.querySelector('#file-js-example .file-name');
-        fileName.textContent = fileInput.files[0].name;
-      }
-    }
-  </script>
-
+  </div>
   </body>
 </html>
+
+<script>
+  const fileInput = document.querySelector('#upload-zone input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#upload-zone .file-name');
+      fileName.textContent = fileInput.files[0].name;
+    }
+  }
+</script>

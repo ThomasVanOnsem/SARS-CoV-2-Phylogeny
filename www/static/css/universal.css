@@ -2,6 +2,13 @@
     background-color: ghostwhite;
     min-height: 4rem;
     align-content: center;
+
+}
+
+.navbar-container{
+    white-space: nowrap;
+    overflow: hidden;
+    width: 570px;
 }
 
 .navbar-item img{
@@ -13,11 +20,21 @@
     padding-right: .5rem;
 }
 
-.navbar-menu{
-    text-align: center;
-}
-
 .description{
     color: lightgray;
     font-style: italic;
+}
+
+.centered-img{
+    text-align: center;
+}
+
+.file.is-boxed .file-cta{
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+.column{
+    overflow: hidden;
+    white-space: nowrap;
 }
