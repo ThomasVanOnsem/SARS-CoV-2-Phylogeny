@@ -7,7 +7,10 @@ import matplotlib.pyplot as plt
 
 def generateProteinPhylo(fastaFile, proteinName):
     """
+    Function to generate an image showing the phylogenetic tree of a protein of the genomes in a fasta file, 
     Takes around 20sec to run for the spike (surface glycoprotein)
+    :param fastaFile: str, name of the file containing the genomes (fasta format)
+    :param proteinName: str, name of the protein for which we want to construct a phylogenetic tree
     """
     genomes = parseFasta(fastaFile)
     sequences = getProteinSequences(genomes, proteinName)
@@ -18,6 +21,12 @@ def generateProteinPhylo(fastaFile, proteinName):
 
 
 def getProteinSequences(genomes, proteinName):
+    """
+    Function that gets sequences of a certain protein from possible multiple genomes.
+    :param genomes: Genomes, the genomes in which we search for the protein
+    :param proteinName: str, the name of the protein we want the sequences of
+    :return: MultipleSeqAlignment, the sequences we found and associated with their respective genome
+    """
     alignment = MultipleSeqAlignment([])
     sequencesUsed = set()
     for genome in genomes.getGenomesAsList():
@@ -30,11 +39,16 @@ def getProteinSequences(genomes, proteinName):
         if sequence not in sequencesUsed:
             alignment.add_sequence(genome.name, sequence)
             sequencesUsed.add(sequence)
-    print(alignment)
+    # print(alignment)
     return alignment
 
 
 def constructTree(alignment: MultipleSeqAlignment):
+    """
+    Function that construct a phylogenetic tree using the neighbour joining algorithm.
+    :param alignment: the alignment for which we wish to construct a tree
+    :return: tree object which can be printed using biopython functions
+    """
     calculator = DistanceCalculator()
     # NJ for neighbour joining
     constructor = DistanceTreeConstructor(calculator, 'nj')
