@@ -1,7 +1,8 @@
 from phylo_proteins.fasta import parseFasta
+from phylo_proteins.align import align
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio.SeqIO import MultipleSeqAlignment
-from Bio.Phylo import draw as drawTree, draw_ascii
+import Bio.Phylo as Phylo
 import matplotlib.pyplot as plt
 
 
@@ -16,8 +17,20 @@ def generateAllProteinPhylos(fastaFile):
             continue
 
         print(f'Generating phylo for {protein}')
-        tree = constructPhyloTree(proteinSequences[protein])
+        alignment = align(proteinSequences[protein])
+        tree = constructPhylo(alignment)
+        Phylo.write(tree, f'../results/phylo/newick/{protein}.newick', 'newick')
         drawPhylo(tree, protein, proteinCounts[protein])
+
+
+def generateProteinPhylo(fastaFile, proteinName):
+    samples = parseFasta(fastaFile)
+    proteinCounts = samples.getProteinCounts()
+    sequences = samples.getProteinSequences(proteinName)
+    alignment = align(sequences)
+    tree = constructPhylo(alignment)
+    Phylo.write(tree, f'../results/phylo/newick/{proteinName}.newick', 'newick')
+    drawPhylo(tree, proteinName, proteinCounts[proteinName])
 
 
 def drawPhylo(tree, name, sampleAmount):
@@ -26,12 +39,12 @@ def drawPhylo(tree, name, sampleAmount):
     Stores png to results/phylo
     """
     # Remove labels for better looking tree
-    drawTree(tree, label_func=lambda a: '')
+    Phylo.draw(tree, label_func=lambda a: '')
     plt.title(f'{name} with {sampleAmount} samples')
     plt.savefig(f"../results/phylo/{name}.png")
 
 
-def constructPhyloTree(alignment: MultipleSeqAlignment):
+def constructPhylo(alignment: MultipleSeqAlignment):
     """
     Function that construct a phylogenetic tree using the neighbour joining algorithm.
     :param alignment: the alignment for which we wish to construct a tree

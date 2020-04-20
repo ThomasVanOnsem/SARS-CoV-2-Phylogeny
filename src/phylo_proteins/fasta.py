@@ -12,7 +12,8 @@ def parseFasta(name):
     with open(name) as file:
         for record in SeqIO.parse(file, "fasta"):
             proteinName = getProteinName(record)
-            protein = Protein(proteinName, record.seq)
+            proteinSequence = SeqIO.SeqRecord(record.seq, id=record.id, name=proteinName)
+            protein = Protein(proteinName, proteinSequence)
             ID = getID(record)
             samples.getSample(ID).addProtein(protein)
     return samples
@@ -32,6 +33,7 @@ def getProteinName(record):
     if '[' in proteinName:
         proteinName = proteinName[: proteinName.find('[')]
     proteinName = proteinName.strip().lower()
+    proteinName = proteinName.replace('proteiin', 'protein')
     return proteinName
 
 

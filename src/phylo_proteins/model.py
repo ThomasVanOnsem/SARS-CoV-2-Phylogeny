@@ -1,15 +1,12 @@
-from Bio.Align import MultipleSeqAlignment
-
-
 class Protein:
-    def __init__(self, name, sequence):
+    def __init__(self, name, sequenceRecord):
         """
         Initializes a Protein.
         :param name: name of the protein
         :param sequence: dna sequence associated with the protein
         """
         self.name = name
-        self.sequence = sequence
+        self.sequenceRecord = sequenceRecord
 
 
 class Sample:
@@ -78,50 +75,47 @@ class Samples:
 
     def getAllProteinSequences(self):
         """
-        Returns a dict with protein names as keys and MultipleSequenceAlignment's as values.
-        The alignments only contain unique sequences, so no duplicates are present.
+        Returns a dict with protein names as keys and lists of SeqRecord's as values.
+        The sequences only contain unique sequences, so no duplicates are present.
         """
-        alignments = {}
+        sequences = {}
         sequencesUsed = {}
-        for genome in self.getSamplesAsList():
-            for protein in genome.getProteinsAsList():
-                if protein.name not in alignments:
-                    alignments[protein.name] = MultipleSeqAlignment([])
-                    sequencesUsed[protein.name] = []
-
-                sequence = str(protein.sequence)
+        for sample in self.getSamplesAsList():
+            for protein in sample.getProteinsAsList():
+                if protein.name not in sequences:
+                    sequences[protein.name] = list()
+                    sequencesUsed[protein.name] = set()
+                sequenceStr = str(protein.sequenceRecord.seq)
                 # Skip duplicate sequences for a better looking tree
-                if sequence not in sequencesUsed[protein.name]:
-                    alignments[protein.name].add_sequence(genome.name, sequence)
-                    sequencesUsed[protein.name].append(sequence)
-
-        return alignments
+                if sequenceStr not in sequencesUsed[protein.name]:
+                    sequences[protein.name].append(protein.sequenceRecord)
+                    sequencesUsed[protein.name].add(sequenceStr)
+        return sequences
 
     def getProteinSequences(self, proteinName):
         """
         Function that gets sequences of a certain protein from possible multiple genomes.
         :param proteinName: str, the name of the protein we want the sequences of
-        :return: MultipleSeqAlignment, the sequences we found and associated with their respective genome
+        :return: list of SeqRecord's, the sequences we found and associated with their respective genome
         """
-        alignment = MultipleSeqAlignment([])
+        sequences = []
         sequencesUsed = set()
-        for genome in self.getSamplesAsList():
-            protein = genome.getProtein(proteinName)
+        for sample in self.getSamplesAsList():
+            protein = sample.getProtein(proteinName)
             if not protein:
                 continue
-
-            sequence = str(protein.sequence)
+            sequenceStr = str(protein.sequenceRecord.seq)
             # Skip duplicate sequences for a better looking tree
-            if sequence not in sequencesUsed:
-                alignment.add_sequence(genome.name, sequence)
-                sequencesUsed.add(sequence)
-        return alignment
+            if sequenceStr not in sequencesUsed:
+                sequences.append(protein.sequenceRecord)
+                sequencesUsed.add(sequenceStr)
+        return sequences
 
     def getProteinCounts(self):
         """ Returns a dict with protein names as keys and the amount of times it is sampled as values """
         proteinCounts = {}
-        for genome in self.getSamplesAsList():
-            for protein in genome.getProteinsAsList():
+        for sample in self.getSamplesAsList():
+            for protein in sample.getProteinsAsList():
                 if protein.name not in proteinCounts:
                     proteinCounts[protein.name] = 0
                 proteinCounts[protein.name] += 1
