@@ -11,7 +11,7 @@
     <div class="columns">
         <div class="column is-4">
             <span class="description">choose protein to view:</span>
-            <form onsubmit="callView(event)">
+            <form onsubmit="updateDoc(event)">
             <div class="container">
                 <div class="field select">
                     <select id="proteinChoice">
@@ -43,28 +43,25 @@
         </div>
         <div class="column is-8">
             <div class="centered-img">
-                <img src="{{ phylo_image }}">
+                <img id="result-img" src="">
             </div>
         </div>
     </div>
 </section>
-<section class="section">
-    <div class="card">
-        <header class="card-header">
-            <p class="card-header-title">
-                Newick representation
-            </p>
-        </header>
-    </div>
-    <div class="card-content">
-        <svg id="newick-graph", height="5000", width="1000"></svg>
-    </div>
+<section id="hidden-section" style="display:none;" class="section">
+    <h2>Newick represention</h2>
+
+    <div id="newick-graph", height="1000", width="1000"></div>
 </section>
 
 {% endblock %}
 
 {% block scripts %}
 <script>
-    $(document).ready(getNewick())
+    function updateDoc (event) {
+        event.preventDefault();
+        callView();
+        getNewick();
+    }
 </script>
 {% endblock %}

@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/universal.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
       {% block scriptIncludes %}{% endblock %}
   </head>
-  <body>
+  <body class="main">
     <div class="container-fluid">
       <nav class="navbar" role="navigation" aria-label="main navigation">
           <a class="navbar-item">
@@ -28,15 +29,13 @@
     </div>
 
     {% block page %}{% endblock %}
-
+    </body>
     <footer class="footer">
         <div class="content has-text-centered">
             <p>© Universiteit Antwerpen</p>
             <p class="description">Astrid Lamens, Max Van Houcke, Miguel Dagrain, Thomas Van Onsem</p>
         </div>
     </footer>
-
-  </body>
 </html>
 
 {% block scripts %}{% endblock %}

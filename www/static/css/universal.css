@@ -1,3 +1,10 @@
+.main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    margin-bottom: 112px;
+}
+
 .navbar{
     background-color: ghostwhite;
     min-height: 4rem;

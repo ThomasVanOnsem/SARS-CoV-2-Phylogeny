@@ -1,8 +1,11 @@
-function callView(e) {
-    e.preventDefault();
+function callView() {
     var proteinName = $("select#proteinChoice option:checked").val();
-    var url = "/data/view/" + String(proteinName);
+    var callUrl = "/data/view/" + String(proteinName);
 
-    $(location).attr('href', url);
+    $.ajax({
+        url: callUrl,
+    }).done(function( data ) {
+        $('#result-img').attr('src', data['image'])
+    });
 
 }

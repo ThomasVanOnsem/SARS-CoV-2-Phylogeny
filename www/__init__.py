@@ -20,16 +20,16 @@ def homepage(image_location=None):
     else:
         return render_template('home.html')
 
-@app.route("/data/view/", defaults={'protein': None})
-@app.route("/data/view/<protein>")
-def viewData(protein):
-    if protein is not None:
-        #the link start at the www file
-        image = '/static/results/phylo/' + protein + '.png'
+@app.route("/data/view/")
+def viewData():
+    return render_template('results.html')
 
-        return render_template('results.html', phylo_image=image)
-    else:
-        return render_template('results.html')
+@app.route("/data/view/<protein>")
+def getImage(protein):
+    # the link start at the www file
+    image = '/static/results/phylo/' + protein + '.png'
+
+    return jsonify({'image': image})
 
 @app.route("/data/newick/<protein>")
 def getNewick(protein):
