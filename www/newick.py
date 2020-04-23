@@ -31,8 +31,7 @@ def convert_newick_json(newick):
         newick_string = content.readline()
 
 
-        start_node = {'children': []}
-        current_node = start_node
+        current_node = None
         #we first combine all positions of an opening parentheses with the position of the closing one
         for iter in range(0, len(newick_string)):
             if newick_string[iter] == '(':
@@ -42,16 +41,20 @@ def convert_newick_json(newick):
                     'end': None,
                     'children': []
                 }
-                current_node['children'].append(node)
+                if current_node is not None:
+                    current_node['children'].append(node)
                 current_node=node
 
             if newick_string[iter] == ')':
 
                 current_node['end'] = iter
-                current_node = current_node['parent']
+                if current_node['parent'] is not None:
+                    current_node = current_node['parent']
 
+        if current_node is None:
+            return None
 
-        tree_json, depth = construct_json(start_node, newick_string)
+        tree_json, depth = construct_json(current_node, newick_string)
         #-2 because 1 for the top node and one because the root also adds one
         tree_json['depth'] = depth-2
         return tree_json
