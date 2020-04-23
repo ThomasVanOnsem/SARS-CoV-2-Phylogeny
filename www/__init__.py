@@ -2,13 +2,15 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 #from src.phylo_proteins.main import generateProteinPhylo
-
+from newick import convert_newick_json
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
 app = Flask(__name__)
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 app.config['UPLOAD_FOLDER'] = '../data/'
-app.config['IMAGE_FOLDER'] = '../results/'
+app.config['RESULT_FOLDER'] = os.path.join(THIS_FOLDER,'static/results/phylo/')
+
 
 
 @app.route('/')
@@ -18,15 +20,29 @@ def homepage(image_location=None):
     else:
         return render_template('home.html')
 
+@app.route("/data/view/", defaults={'protein': None})
+@app.route("/data/view/<protein>")
+def viewData(protein):
+    if protein is not None:
+        #the link start at the www file
+        image = '/static/results/phylo/' + protein + '.png'
 
-@app.route("/features")
-def features():
-    return render_template('features.html')
+        return render_template('results.html', phylo_image=image)
+    else:
+        return render_template('results.html')
+
+@app.route("/data/newick/<protein>")
+def getNewick(protein):
+    newick = app.config["RESULT_FOLDER"] + 'newick/' + protein + '.newick'
+
+    newick_json = convert_newick_json(newick)
+
+    return jsonify(newick_json)
 
 
-@app.route('/get-stored-sequences', methods=['GET'])
-def getStoredSequences():
-    return jsonify({})  # TODO what?
+@app.route("/data/add")
+def addData():
+    return render_template('add.html')
 
 
 def allowed_file(filename):

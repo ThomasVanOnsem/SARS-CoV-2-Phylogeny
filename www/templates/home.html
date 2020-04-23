@@ -1,134 +1,102 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sequence Alignment</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-    <link rel="stylesheet" href="static/css/universal.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../static/js/home.js"></script>
-  </head>
-  <body>
+{% extends "general_layout.html" %}
 
-  <div class="container-fluid">
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-      <a class="navbar-item">
-        <img src="static/bacteria.png">
-      </a>
+{% block page %}
+<section class="section">
 
-      <div class="navbar-menu">
-        <a class="navbar-item">Home</a>
-        <a class="navbar-item" href="http://localhost:5000/features">Features</a>
-        <a class="navbar-item" href="https://github.com/ThomasVanOnsem/SARS-CoV-2-Phylogeny">Project</a>
-      </div>
+    <h1 class="title">Sequence Alignment</h1>
+    <div class="columns">
+      <div class="column is-half">
+      <span class="description">Choose or upload a sequence to allign:</span>
+      <form action="http://localhost:5000/submit-data" method="POST" enctype="multipart/form-data">
+        <div class="columns">
 
-  </nav>
+          <div class="column is-four-fifths is-desktop">
+            <div class="field">
+              <div class="control is-medium is-loading">  <!-- TODO loading for checking input -->
+                <label>
+                  <textarea class="textarea is-medium" placeholder="Sequence Input" name="sequence-text"></textarea>
+                </label>
+              </div>
+            </div>
+          </div>
 
-  <section class="section">
+          <div class="column">
 
-      <h1 class="title">Sequence Alignment</h1>
-      <div class="columns">
-        <div class="column is-half">
-        <span class="description">Choose or upload a sequence to allign:</span>
-        <form action="http://localhost:5000/submit-data" method="POST" enctype="multipart/form-data">
-          <div class="columns">
-
-            <div class="column is-four-fifths is-desktop">
-              <div class="field">
-                <div class="control is-medium is-loading">  <!-- TODO loading for checking input -->
-                  <label>
-                    <textarea class="textarea is-medium" placeholder="Sequence Input" name="sequence-text"></textarea>
-                  </label>
+            <div class="field">
+              <div class="control has-icons-left">
+                <div class="select is-rounded">
+                  <select id="sequence-choices">
+                    <option selected="selected">None</option>
+                    <option>Sequence 1</option>
+                    <option>Sequence 2</option>
+                    <option>Sequence 3</option>
+                  </select>
+                </div>
+                <div class="icon is-small is-left">
+                  <i class="fas fa-dna"></i>
                 </div>
               </div>
             </div>
 
-            <div class="column">
-
-              <div class="field">
-                <div class="control has-icons-left">
-                  <div class="select is-rounded">
-                    <select id="sequence-choices">
-                      <option selected="selected">None</option>
-                      <option>Sequence 1</option>
-                      <option>Sequence 2</option>
-                      <option>Sequence 3</option>
-                    </select>
-                  </div>
-                  <div class="icon is-small is-left">
-                    <i class="fas fa-dna"></i>
-                  </div>
-                </div>
+            <div id="upload-zone" class="">
+              <div class="file has-name is-boxed">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="file">
+                  <span class="file-cta">
+                    <span class="file-icon"><i class="fas fa-upload"></i></span>
+                    <span class="file-label">Choose a file…</span>
+                  </span>
+                  <span class="file-name"></span>
+                </label>
               </div>
-
-              <div id="upload-zone" class="">
-                <div class="file has-name is-boxed">
-                  <label class="file-label">
-                    <input class="file-input" type="file" name="file">
-                    <span class="file-cta">
-                      <span class="file-icon"><i class="fas fa-upload"></i></span>
-                      <span class="file-label">Choose a file…</span>
-                    </span>
-                    <span class="file-name"></span>
-                  </label>
-                </div>
-              </div>
-
             </div>
 
           </div>
 
-          <span class="description">Alignment Options:</span>
-          <div class="container">
-            <label class="checkbox">
-              <input type="checkbox"> Option 1
-              <input type="checkbox"> Option 2
-              <input type="checkbox"> Option 3
-            </label>
-          </div>
-          <br>
-
-          <span class="description">Output Options:</span>
-          <div class="container">
-            <label class="checkbox">
-              <input type="checkbox"> Option 1
-              <input type="checkbox"> Option 2
-              <input type="checkbox"> Option 3
-            </label>
-          </div>
-          <br>
-          <div class="field">
-            <p class="control">
-              <button class="button is-primary" type="submit" onclick="addProgressBar()">Analyze</button>
-            </p>
-          </div>
-
-          <div id="progress-bar-div"></div>
-
-        </form>
         </div>
 
-        <div class="column is-half">
-          <div class="centered-img">
-            <img src="{{ phylo_image }}">
-          </div>
+        <span class="description">Alignment Options:</span>
+        <div class="container">
+          <label class="checkbox">
+            <input type="checkbox"> Option 1
+            <input type="checkbox"> Option 2
+            <input type="checkbox"> Option 3
+          </label>
+        </div>
+        <br>
+
+        <span class="description">Output Options:</span>
+        <div class="container">
+          <label class="checkbox">
+            <input type="checkbox"> Option 1
+            <input type="checkbox"> Option 2
+            <input type="checkbox"> Option 3
+          </label>
+        </div>
+        <br>
+        <div class="field">
+          <p class="control">
+            <button class="button is-primary" type="submit" onclick="addProgressBar()">Analyze</button>
+          </p>
         </div>
 
+        <div id="progress-bar-div"></div>
+
+      </form>
       </div>
-  </section>
-  </div>
 
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>© Universiteit Antwerpen</p>
-      <p class="description">Astrid Lamens, Max Van Houcke, Miguel Dagrain, Thomas Van Onsem</p>
+      <div class="column is-half">
+        <div class="centered-img">
+          <img src="{{ phylo_image }}">
+        </div>
+      </div>
+
     </div>
-  </footer>
+</section>
 
-  </body>
-</html>
+{% endblock %}
+
+{% block scripts %}
 
 <script>
   const fileInput = document.querySelector('#upload-zone input[type=file]');
@@ -139,3 +107,5 @@
     }
   }
 </script>
+
+{% endblock %}

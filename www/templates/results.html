@@ -1,0 +1,70 @@
+{% extends "general_layout.html" %}
+
+{% block scriptIncludes %}
+<script src="{{ url_for('static', filename='js/results.js') }}"></script>
+<script src="{{ url_for('static', filename='js/newick.js') }}"></script>
+{% endblock %}
+
+{% block page %}
+<section class="section">
+    <h1 class="title">Phylogenetic trees results</h1>
+    <div class="columns">
+        <div class="column is-4">
+            <span class="description">choose protein to view:</span>
+            <form onsubmit="callView(event)">
+            <div class="container">
+                <div class="field select">
+                    <select id="proteinChoice">
+                        <option value="chain_a">chain a</option>
+                        <option value="chain_b">chain b</option>
+                        <option value="chain_c">chain c</option>
+                        <option value="envelope_protein">envelope protein</option>
+                        <option value="membrane_glycoprotein">membrane glycoprotein</option>
+                        <option value="nucleocapsid_phosphoprotein">nucleocapsid phosphoprotein</option>
+                        <option value="orf1a_polyprotein">orf1a polyprotein</option>
+                        <option value="orf1ab_polyprotein">orf1ab polyprotein</option>
+                        <option value="orf3a_protein">orf3a protein</option>
+                        <option value="orf6_protein">orf6 protein</option>
+                        <option value="orf7a_protein">orf7a protein</option>
+                        <option value="orf7b">orf7b</option>
+                        <option value="orf8_protein">orf8 protein</option>
+                        <option value="orf10_protein">orf10 protein</option>
+                        <option value="surface_glycoprotein">surface glycoprotein</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="field">
+                <p class="control">
+                    <button class="button is-primary" type="submit">View</button>
+                </p>
+            </div>
+        </form>
+        </div>
+        <div class="column is-8">
+            <div class="centered-img">
+                <img src="{{ phylo_image }}">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="card">
+        <header class="card-header">
+            <p class="card-header-title">
+                Newick representation
+            </p>
+        </header>
+    </div>
+    <div class="card-content">
+        <svg id="newick-graph", height="5000", width="1000"></svg>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(getNewick())
+</script>
+{% endblock %}
