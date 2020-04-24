@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 #from src.phylo_proteins.main import generateProteinPhylo
-from newick import convert_newick_json
+from www.newick import convert_newick_json
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
