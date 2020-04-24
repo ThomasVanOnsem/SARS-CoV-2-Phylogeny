@@ -19,8 +19,8 @@ def generateAllProteinPhylos(fastaFile):
         print(f'Generating phylo for {protein}')
         alignment = align(proteinSequences[protein])
         tree = constructPhylo(alignment)
-        protein.replace(' ', '_')
-        Phylo.write(tree, f'../www/static/results/phylo/newick/{protein}.newick', 'newick')
+        proteinFile = protein.replace(' ', '_')
+        Phylo.write(tree, f'../www/static/results/phylo/newick/{proteinFile}.newick', 'newick')
         drawPhylo(tree, protein, proteinCounts[protein])
 
 
@@ -30,8 +30,8 @@ def generateProteinPhylo(fastaFile, proteinName):
     sequences = samples.getProteinSequences(proteinName)
     alignment = align(sequences)
     tree = constructPhylo(alignment)
-    proteinName.replace(' ', '_')
-    Phylo.write(tree, f'../www/static/results/phylo/newick/{proteinName}.newick', 'newick')
+    proteinFile = proteinName.replace(' ', '_')
+    Phylo.write(tree, f'../www/static/results/phylo/newick/{proteinFile}.newick', 'newick')
     drawPhylo(tree, proteinName, proteinCounts[proteinName])
 
 
@@ -40,10 +40,12 @@ def drawPhylo(tree, name, sampleAmount):
     Draws a given tree and adds a title with the name and sampleAmount given.
     Stores png to results/phylo
     """
+    #we first get plt in interactive mode because Phylo.draw() does not return a plot
+    plt.ion()
     # Remove labels for better looking tree
     Phylo.draw(tree, label_func=lambda a: '')
     plt.title(f'{name} with {sampleAmount} samples')
-    name.replace(' ', '_')
+    name = name.replace(' ', '_')
     plt.savefig(f"../www/static/results/phylo/{name}.png")
 
 
