@@ -19,7 +19,6 @@ def generateAllProteinPhylos(fastaFile):
         print(f'Generating phylo for {protein}')
         alignment = align(proteinSequences[protein])
         tree = constructPhylo(alignment)
-        proteinName.replace(' ', '_')
         Phylo.write(tree, f'../www/static/results/phylo/newick/{protein}.newick', 'newick')
         drawPhylo(tree, protein, proteinCounts[protein])
 
