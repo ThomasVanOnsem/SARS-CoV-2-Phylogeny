@@ -12,6 +12,7 @@ def construct_json(structure, newick_string, tree=None):
         if end_length == len(name_length[1]): end_length = name_length[1].find(')')
         element_length = name_length[1][:7]
 
+        tree_element["name"] = element_name
         tree_element["length"] = element_length
         tree_element["children"] = {}
 

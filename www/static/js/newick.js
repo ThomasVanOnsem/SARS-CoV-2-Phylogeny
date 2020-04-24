@@ -1,25 +1,49 @@
 function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth) {
-    var sizeOneBox = (heightEnd-heightBegin)/(Object.keys(node['children']).length+1);
-
-    beginLine = heightBegin+(sizeOneBox/2);
-    endLine = heightEnd-(sizeOneBox/2);
-    xPointsVer = lengthHorLine*depth+10;
-    if (Object.keys(node['children']).length != 0) {
-        var line1 = draw.line(xPointsVer, beginLine, xPointsVer, endLine);
-        line1.stroke({width: 2, color: '#000000'});
+    var denominatorSize;
+    if (node["name"]) {
+        denominaterSize = Object.keys(node['children']).length+1;
+    } else {
+        denominaterSize = Object.keys(node['children']).length;
+        if (denominatorSize === 0){
+            //there is nothing to draw
+            return;
+        }
     }
-    connectionEndX = xPointsVer+lengthHorLine;
-    //we draw a line to for this variant (not an offspring)
-    var line2 = draw.line(xPointsVer, endLine, connectionEndX, endLine);
-    line2.stroke({width: 2, color: '#000000'});
+
+    var sizeOneBox = (heightEnd-heightBegin)/denominaterSize;
+
+    var beginLine = heightBegin+(sizeOneBox/2);
+    var endLine = heightEnd-(sizeOneBox/2);
+    var xPointsVer = lengthHorLine*depth+10;
+    var connectionEndX = xPointsVer+lengthHorLine;
+
+
+    var line1 = draw.line(xPointsVer, beginLine, xPointsVer, endLine);
+    line1.stroke({width: 2, color: '#000000'});
+
+    if (node["name"]) {
+        var name = draw.text(node["name"]);
+
+        var xName = 0;
+        if (Object.keys(node['children']).length != 0) {
+            //we draw a line to for this variant (not an offspring)
+            var line2 = draw.line(xPointsVer, endLine, connectionEndX, endLine);
+            line2.stroke({width: 2, color: '#000000'});
+            xName = connectionEndX+10;
+        }else{
+            xName = xPointsVer+10;
+        }
+        name.move(xName, endLine-10);
+    }
+
     var iter = 0;
     for (var key in node['children']) {
         connectionLineY = (iter+0.5)*sizeOneBox+heightBegin;
         var line3 = draw.line(xPointsVer, connectionLineY, connectionEndX, connectionLineY);
         line3.stroke({width: 2, color: '#000000'});
         console.log(key);
-        beginNextHeight = iter*sizeOneBox+heightBegin;
-        endNextHeight = (iter+1)*sizeOneBox+heightBegin;
+        var beginNextHeight = iter*sizeOneBox+heightBegin;
+        var endNextHeight = (iter+1)*sizeOneBox+heightBegin;
         recursiveDraw(draw, node['children'][key], beginNextHeight, endNextHeight, lengthHorLine,depth+1);
         iter++;
     }
