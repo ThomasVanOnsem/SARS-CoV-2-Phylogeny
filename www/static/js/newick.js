@@ -1,13 +1,10 @@
 function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth) {
-    var denominatorSize;
-    if (node["name"]) {
-        denominaterSize = Object.keys(node['children']).length+1;
+    var denominaterSize;
+    if (jQuery.isEmptyObject(node['children'])){
+        denominaterSize = 1;
     } else {
         denominaterSize = Object.keys(node['children']).length;
-        if (denominatorSize === 0){
-            //there is nothing to draw
-            return;
-        }
+        lastYText = 0;
     }
 
     var sizeOneBox = (heightEnd-heightBegin)/denominaterSize;
@@ -21,19 +18,17 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth)
     var line1 = draw.line(xPointsVer, beginLine, xPointsVer, endLine);
     line1.stroke({width: 2, color: '#000000'});
 
+    //only leaves have names
     if (node["name"]) {
         var name = draw.text(node["name"]);
 
-        var xName = 0;
-        if (Object.keys(node['children']).length != 0) {
-            //we draw a line to for this variant (not an offspring)
-            var line2 = draw.line(xPointsVer, endLine, connectionEndX, endLine);
-            line2.stroke({width: 2, color: '#000000'});
-            xName = connectionEndX+10;
-        }else{
-            xName = xPointsVer+10;
+        var xName = xPointsVer+10;
+        var yName = endLine-10;
+        if (lastYText < yName && lastYText > yName-20){
+            yName = lastYText+15;
         }
-        name.move(xName, endLine-10);
+        name.move(xName, yName);
+        lastYText = yName;
     }
 
     var iter = 0;
@@ -44,7 +39,7 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth)
         console.log(key);
         var beginNextHeight = iter*sizeOneBox+heightBegin;
         var endNextHeight = (iter+1)*sizeOneBox+heightBegin;
-        recursiveDraw(draw, node['children'][key], beginNextHeight, endNextHeight, lengthHorLine,depth+1);
+        recursiveDraw(draw, node['children'][key], beginNextHeight, endNextHeight, lengthHorLine, depth+1);
         iter++;
     }
     return
@@ -52,7 +47,8 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth)
 
 function getNewick() {
     $('#newick-graph').empty();
-    var draw = SVG().addTo('#newick-graph').size('5000', '1000')
+
+    var draw = SVG().addTo('#newick-graph').size('1500', '2000')
 
     var proteinName = $("select#proteinChoice option:checked").val();
     var callUrl = "/data/newick/" + String(proteinName);
@@ -60,10 +56,12 @@ function getNewick() {
     $.ajax({
         url: callUrl,
     }).done(function( data ) {
-        var totalWidth = $("#newick-graph").attr('width');
+        var totalWidth = draw.attr('width');
         console.log(data["depth"]);
-        lengthHorizontalLine = (0.95*totalWidth)/data['depth'];
-        var totalHeight = $("#newick-graph").attr('height');
+        //-10 because we want to write text
+        lengthHorizontalLine = ((0.95*totalWidth)/data['depth'])-10;
+        var totalHeight = draw.attr('height');
+        lastYText = 0;
         //we give depth specifically as a parameter as it only appears in the top level of data
         recursiveDraw(draw, data, 0, totalHeight, lengthHorizontalLine, 0);
     });
