@@ -90,6 +90,7 @@
 <script>
     function updateDoc (event) {
         event.preventDefault();
+        $('#selectedNodeContent').empty();
         callView();
         getNewick();
         getShortInfo();
