@@ -1,1 +1,1 @@
-This is just a little example of an idea I had. We could have here a short explanation of the selected protein. It should not be the entire theoretical explanation, but just a short paragraph what the selected protein use is.
+This is just a little example of an idea I had. We could have here a short explanation of the selected protein. It should not be the entire theoretical explanation, but just a short paragraph that explains the use of the selected protein for the virus.
