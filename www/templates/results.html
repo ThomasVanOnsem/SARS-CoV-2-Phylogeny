@@ -3,6 +3,7 @@
 {% block scriptIncludes %}
 <script src="{{ url_for('static', filename='js/results.js') }}"></script>
 <script src="{{ url_for('static', filename='js/newick.js') }}"></script>
+<script src="{{ url_for('static', filename='js/short_explanation.js') }}"></script>
 {% endblock %}
 
 {% block page %}
@@ -49,8 +50,37 @@
     </div>
 </section>
 <section id="hidden-section" style="display:none;" class="section">
-    <h2>Newick represention</h2>
-
+    <hr>
+    <h2 id="title-protein" class="title"></h2>
+    <div class="columns">
+        <div class="column is-one-third">
+            <div class="card">
+                <header class="card-header has-background-primary">
+                    <p class="card-header-title">
+                        Selected Node
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div id="selectedNodeContent" class="content">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column is-two-third">
+            <div class="card" style="width:50%;margin:auto;">
+                <header class="card-header has-background-primary">
+                    <p class="card-header-title">
+                        Short Description Protein
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <p id="protein-explanation"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="newick-graph"></div>
 </section>
 
@@ -62,6 +92,7 @@
         event.preventDefault();
         callView();
         getNewick();
+        getShortInfo();
     }
 </script>
 {% endblock %}

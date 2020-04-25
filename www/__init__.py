@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 #from src.phylo_proteins.main import generateProteinPhylo
-from www.newick import convert_newick_json
+from newick import convert_newick_json
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 app.config['UPLOAD_FOLDER'] = '../data/'
 app.config['RESULT_FOLDER'] = os.path.join(THIS_FOLDER,'static/results/phylo/')
-
+app.config['EXPLANATION_FOLDER'] = os.path.join(THIS_FOLDER, 'static/protein_explanations/')
 
 
 @app.route('/')
@@ -38,6 +38,25 @@ def getNewick(protein):
     newick_json = convert_newick_json(newick)
 
     return jsonify(newick_json)
+
+@app.route("/data/info/<protein>")
+def getInfoProtein(protein):
+    info = {}
+
+    file = open(app.config["EXPLANATION_FOLDER"] + protein + '.txt', 'r')
+    if file:
+        info["explanation"] = file.readline()
+    else:
+        info["explanation"] = ""
+
+    return jsonify(info)
+
+@app.route("/data/info/protein/<variant>")
+def getInfoVariant(variant):
+    info = {}
+    info["name"] = variant
+
+    return jsonify(info)
 
 
 @app.route("/data/add")

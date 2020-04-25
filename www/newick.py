@@ -38,8 +38,8 @@ def construct_json(structure, newick_string, tree=None):
     return tree, depth+1
 
 #helperfunc to convert neweck to json (as this is more usefull for handling in jquery)
-def convert_newick_json(newick):
-    content = open(newick, "r")
+def convert_newick_json(newick_file):
+    content = open(newick_file, "r")
     if content:
         newick_string = content.readline()
 
