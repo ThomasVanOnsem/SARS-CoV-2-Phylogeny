@@ -2,110 +2,30 @@
 
 {% block page %}
 <section class="section">
+    <h1 class="title is-1">Phylogenetic trees</h1>
+</section>
+<section class="section">
 
-    <h1 class="title">Sequence Alignment</h1>
-    <div class="columns">
-      <div class="column is-half">
-      <span class="description">Choose or upload a sequence to allign:</span>
-      <form action="http://localhost:5000/submit-data" method="POST" enctype="multipart/form-data">
-        <div class="columns">
+    <h2 class="subtitle is-2">Intro</h2>
+    <p class="content is-medium">Our project is related to the lesson about phylogenetic trees. We applied this to 
+    variants of the coronavirus. The results are accessible through this website and there are also some added features. 
+    There is also a theorethical analysis wich has been written in a small paper.</p>
+    
+</section>
+<section class="section">
 
-          <div class="column is-four-fifths is-desktop">
-            <div class="field">
-              <div class="control is-medium is-loading">  <!-- TODO loading for checking input -->
-                <label>
-                  <textarea class="textarea is-medium" placeholder="Sequence Input" name="sequence-text"></textarea>
-                </label>
-              </div>
-            </div>
-          </div>
+    <h2 class="subtitle is-2">What can you find on each page</h2>
+    
+    <h3 class="subtitle is-4">results</h3>
+    <p class="content is-medium">On the results tab you can view the calculated phylogenetic trees for each protein of which their are enough samples to have a trustworthy representation. At the bottom there is an interactive representation of the generated tree. By clicking on one of the endpoints you can see more information about this variant. Next to the information of the variant there is also some information about the selected protein and its purpose within the virus.</p>
 
-          <div class="column">
+    <h3 class="subtitle is-4">add</h3>
+    <p class="content is-medium">On the add page there is a possibility to add new variants of certain proteines to the data. These will be added and the phylogenetic tree will be recalculated. There are two ways to add data. The first is for if you have the sequence of the protein in dna and now its position in the dna string. The second method is for if you have the attained amino acids but not the dna sequence. You can switch between these two options by a toggle on the top left</p>
 
-            <div class="field">
-              <div class="control has-icons-left">
-                <div class="select is-rounded">
-                  <select id="sequence-choices">
-                    <option selected="selected">None</option>
-                    <option>Sequence 1</option>
-                    <option>Sequence 2</option>
-                    <option>Sequence 3</option>
-                  </select>
-                </div>
-                <div class="icon is-small is-left">
-                  <i class="fas fa-dna"></i>
-                </div>
-              </div>
-            </div>
+    <h3 class="subtitle is-4">project</h3>
+    <p class="content is-medium">The project tab is not a page on this website but a link to the github repository of this project.</p>
 
-            <div id="upload-zone" class="">
-              <div class="file has-name is-boxed">
-                <label class="file-label">
-                  <input class="file-input" type="file" name="file">
-                  <span class="file-cta">
-                    <span class="file-icon"><i class="fas fa-upload"></i></span>
-                    <span class="file-label">Choose a file…</span>
-                  </span>
-                  <span class="file-name"></span>
-                </label>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <span class="description">Alignment Options:</span>
-        <div class="container">
-          <label class="checkbox">
-            <input type="checkbox"> Option 1
-            <input type="checkbox"> Option 2
-            <input type="checkbox"> Option 3
-          </label>
-        </div>
-        <br>
-
-        <span class="description">Output Options:</span>
-        <div class="container">
-          <label class="checkbox">
-            <input type="checkbox"> Option 1
-            <input type="checkbox"> Option 2
-            <input type="checkbox"> Option 3
-          </label>
-        </div>
-        <br>
-        <div class="field">
-          <p class="control">
-            <button class="button is-primary" type="submit" onclick="addProgressBar()">Analyze</button>
-          </p>
-        </div>
-
-        <div id="progress-bar-div"></div>
-
-      </form>
-      </div>
-
-      <div class="column is-half">
-        <div class="centered-img">
-          <img src="{{ phylo_image }}">
-        </div>
-      </div>
-
-    </div>
 </section>
 
 {% endblock %}
 
-{% block scripts %}
-
-<script>
-  const fileInput = document.querySelector('#upload-zone input[type=file]');
-  fileInput.onchange = () => {
-    if (fileInput.files.length > 0) {
-      const fileName = document.querySelector('#upload-zone .file-name');
-      fileName.textContent = fileInput.files[0].name;
-    }
-  }
-</script>
-
-{% endblock %}

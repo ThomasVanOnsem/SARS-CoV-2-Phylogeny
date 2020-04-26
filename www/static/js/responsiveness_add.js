@@ -2,7 +2,7 @@ function triggerToggle(event){
 	event.preventDefault();
 	var options = $('#type-sequence-input').children();
 	options.each(function () {
-		$(this).blur();
+		$(this).blur()
 		if ($(this).hasClass('is-selected')) {
 			$(this).removeClass('is-selected');
 			$(this).removeClass('is-primary');
