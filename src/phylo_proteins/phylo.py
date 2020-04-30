@@ -4,6 +4,7 @@ from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstruct
 from Bio.SeqIO import MultipleSeqAlignment
 import Bio.Phylo as Phylo
 import matplotlib.pyplot as plt
+import copy
 
 
 def generateAllProteinPhylos(fastaFile):
@@ -40,7 +41,7 @@ def drawPhylo(tree, name, sampleAmount):
     Draws a given tree and adds a title with the name and sampleAmount given.
     Stores png to results/phylo
     """
-    #we first get plt in interactive mode because Phylo.draw() does not return a plot
+    # We first get plt in interactive mode because Phylo.draw() does not return a plot
     plt.ion()
     # Remove labels for better looking tree
     Phylo.draw(tree, label_func=lambda a: '')
@@ -63,3 +64,17 @@ def constructPhylo(alignment: MultipleSeqAlignment):
     tree.ladderize()
     return tree
 
+
+def addDataToTree(new_data, distance_matrix):
+    # Get distance matrix from original build_tree (size will be 2x2)  # TODO
+    dm = copy.deepcopy(distance_matrix)
+    # Distance matrix update with new distances to new data (size will be 3x3)  # TODO
+    for k in range(0, len(dm)):
+        pass
+        # if k != min_i and k != min_j:
+            # dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] - dm[min_i, min_j]) / 2.0
+    # Run nj on new distance matrix
+    calculator = DistanceCalculator()
+    constructor = DistanceTreeConstructor(calculator, 'nj')
+    tree = constructor.nj(dm)
+    return tree
