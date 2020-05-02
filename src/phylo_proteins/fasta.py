@@ -44,5 +44,6 @@ def getID(record):
     :return: str, a string containing the id of the sample
     """
     ID = record.id.replace('join(', '')
-    ID = ID[: ID.find(':')]
+    if ':' in ID:
+        ID = ID[: ID.find(':')]
     return ID
