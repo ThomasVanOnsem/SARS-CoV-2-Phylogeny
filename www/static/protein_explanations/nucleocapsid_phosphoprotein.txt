@@ -1,0 +1,2 @@
+The N protein protects the virus RNA, keeping it stable inside the virus. Many N proteins link together in a long spiral, wrapping and coiling the RNA.
+The accessory proteins ORF9b and ORF9c overlap this same stretch of RNA. ORF9b blocks interferon, a key molecule in the defense against viruses, but it’s not clear if ORF9c is used at all.
