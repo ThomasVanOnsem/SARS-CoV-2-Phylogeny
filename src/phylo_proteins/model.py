@@ -1,12 +1,13 @@
 class Protein:
-    def __init__(self, name, sequenceRecord):
+    def __init__(self, name, sequenceRecord, origin):
         """
         Initializes a Protein.
         :param name: name of the protein
-        :param sequence: dna sequence associated with the protein
+        :param sequenceRecord: dna sequence associated with the protein
         """
         self.name = name
         self.sequenceRecord = sequenceRecord
+        self.origin = origin
 
 
 class Sample:
@@ -132,4 +133,3 @@ class Samples:
             for protein in sample.getProteinsAsList():
                 result += '>>' + str(protein.name) + "\n" + str(protein.sequence)
         return result
-

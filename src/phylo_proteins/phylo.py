@@ -1,10 +1,10 @@
 from phylo_proteins.fasta import parseFasta
 from phylo_proteins.align import align
+from phylo_proteins.model import Samples
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
 from Bio.SeqIO import MultipleSeqAlignment
 import Bio.Phylo as Phylo
 import matplotlib.pyplot as plt
-import copy
 
 
 def generateAllProteinPhylos(fastaFile):
@@ -23,6 +23,7 @@ def generateAllProteinPhylos(fastaFile):
         proteinFile = protein.replace(' ', '_')
         Phylo.write(tree, f'../www/static/results/phylo/newick/{proteinFile}.newick', 'newick')
         drawPhylo(tree, protein, proteinCounts[protein])
+    return samples
 
 
 def generateProteinPhylo(fastaFile, proteinName):
@@ -65,16 +66,23 @@ def constructPhylo(alignment: MultipleSeqAlignment):
     return tree
 
 
-def addDataToTree(new_data, distance_matrix):
-    # Get distance matrix from original build_tree (size will be 2x2)  # TODO
-    dm = copy.deepcopy(distance_matrix)
-    # Distance matrix update with new distances to new data (size will be 3x3)  # TODO
-    for k in range(0, len(dm)):
+def runNJWithNewData(new_data: str, file: bool, protein: str, old_samples: Samples):
+    """
+    Add a new sequence to an existing tree.
+    :param new_data: The new sequence in string or fasta format.
+    :param file: Boolean to indicate new data is fasta file.
+    :param protein: The protein tree to add the data to.
+    :param old_samples: All samples in the system.
+    """
+    if file:
+        samples = parseFasta(new_data, old_samples)
+    else:
+        # TODO Depends in input format str, list, dict..
         pass
-        # if k != min_i and k != min_j:
-            # dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] - dm[min_i, min_j]) / 2.0
-    # Run nj on new distance matrix
-    calculator = DistanceCalculator()
-    constructor = DistanceTreeConstructor(calculator, 'nj')
-    tree = constructor.nj(dm)
-    return tree
+    proteinSequences = samples.getAllProteinSequences()
+    proteinCounts = samples.getProteinCounts()
+    alignment = align(proteinSequences[protein])
+    tree = constructPhylo(alignment)
+    proteinFile = protein.replace(' ', '_')
+    Phylo.write(tree, f'../www/static/results/phylo/newick/{proteinFile}.newick', 'newick')
+    drawPhylo(tree, protein, proteinCounts[protein])

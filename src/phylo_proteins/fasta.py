@@ -2,18 +2,20 @@ from Bio import SeqIO
 from phylo_proteins.model import Samples, Protein
 
 
-def parseFasta(name):
+def parseFasta(name, samples=Samples()):
     """
     Function that parses a fasta file into a Samples object.
     :param name: str, filename of the file we wish to parse
+    :param samples: Samples object to contain all sequences.
     :return: Samples, the samples that are specified in the file
     """
-    samples = Samples()
+    samples = samples
     with open(name) as file:
         for record in SeqIO.parse(file, "fasta"):
             proteinName = getProteinName(record)
             proteinSequence = SeqIO.SeqRecord(record.seq, id=record.id, name=proteinName)
-            protein = Protein(proteinName, proteinSequence)
+            origin = getOrigin(record)
+            protein = Protein(proteinName, proteinSequence, origin)
             ID = getID(record)
             samples.getSample(ID).addProtein(protein)
     return samples
@@ -47,3 +49,10 @@ def getID(record):
     if ':' in ID:
         ID = ID[: ID.find(':')]
     return ID
+
+
+def getOrigin(record):
+    parts = record.description.split('|')
+    if len(parts) < 3:
+        return ""
+    return parts[-1]
