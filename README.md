@@ -9,5 +9,5 @@ sudo apt install muscle
 
 Furthermore we need some python packages installed as well
 ```
-pip3 install -r requirement.txt
+pip3 install -r requirements.txt
 ```
