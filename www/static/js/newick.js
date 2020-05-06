@@ -97,5 +97,4 @@ function getNewick() {
     });
     var spaceSeperatedProteinName = String(proteinName).replace(/_/g, ' ');
     $('#title-protein').append(spaceSeperatedProteinName);
-    $('#hidden-section').attr('style', '');
 }

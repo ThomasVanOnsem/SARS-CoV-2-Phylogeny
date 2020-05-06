@@ -1,4 +1,4 @@
-function triggerToggle(event){
+function triggerToggleAdd(event){
 	event.preventDefault();
 	var options = $('#type-sequence-input').children();
 	options.each(function () {
@@ -20,4 +20,12 @@ function triggerToggle(event){
 			}
 		}
 	})
+}
+
+const fileInput = $('#upload-zone input[type=file]').eq(0);
+fileInput.onchange = () => {
+if (fileInput.files.length > 0) {
+  const fileName = $('#upload-zone .file-name').eq(0);
+  fileName.textContent = fileInput.files[0].name;
+}
 }

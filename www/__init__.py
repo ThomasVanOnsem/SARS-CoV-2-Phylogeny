@@ -20,7 +20,7 @@ def homepage(image_location=None):
     else:
         return render_template('home.html')
 
-@app.route("/data/view/")
+@app.route("/data/")
 def viewData():
     return render_template('results.html')
 
@@ -57,11 +57,6 @@ def getInfoVariant(variant):
     info["name"] = variant
 
     return jsonify(info)
-
-
-@app.route("/data/add")
-def addData():
-    return render_template('add.html')
 
 
 def allowed_file(filename):

@@ -6,6 +6,7 @@
     <title>Phylogentic trees</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/universal.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     {% block stylesheetIncludes %}{% endblock %}
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -22,7 +23,6 @@
           <div class="navbar-menu">
             <a class="navbar-item" href="{{ url_for('homepage') }}">Home</a>
             <a class="navbar-item" href="{{ url_for('viewData') }}">results</a>
-            <a class="navbar-item" href="{{ url_for('addData') }}">add data</a>
             <a class="navbar-item" href="https://github.com/ThomasVanOnsem/SARS-CoV-2-Phylogeny">Project</a>
           </div>
 
