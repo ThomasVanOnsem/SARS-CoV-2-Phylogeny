@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/universal.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     {% block stylesheetIncludes %}{% endblock %}
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+      <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
     {% block scriptIncludes %}{% endblock %}
   </head>
   <body class="main">
@@ -31,7 +31,7 @@
 
     {% block page %}{% endblock %}
     </body>
-    <footer class="footer">
+    <footer class="footer" style="z-index:10">
         <div class="content has-text-centered">
             <p>© Universiteit Antwerpen</p>
             <p class="description">Astrid Lamens, Max Van Houcke, Miguel Dagrain, Thomas Van Onsem</p>

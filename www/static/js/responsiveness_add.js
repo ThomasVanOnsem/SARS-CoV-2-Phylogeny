@@ -12,10 +12,14 @@ function triggerToggleAdd(event){
 
 			//now we change the page
 			if($(this).attr('id') === 'choose-nuc'){
+				$('#nucleotide-adding-title').attr('style', '');
 				$('#nucleotide-adding').attr('style', '');
+				$('#amino-acid-adding-title').attr('style', 'display:none;');
 				$('#amino-acid-adding').attr('style', 'display:none;');
 			} else {
+				$('#nucleotide-adding-title').attr('style', 'display:none;');
 				$('#nucleotide-adding').attr('style', 'display:none;');
+				$('#amino-acid-adding-title').attr('style', '');
 				$('#amino-acid-adding').attr('style', '');
 			}
 		}
