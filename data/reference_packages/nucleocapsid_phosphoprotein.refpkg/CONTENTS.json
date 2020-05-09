@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "nucleocapsid_phosphoprotein.fasta", 
+        "phylo_model": "phylo_modelizlE6J.json", 
+        "tree": "nucleocapsid_phosphoprotein.newick", 
+        "tree_stats": "nucleocapsid_phosphoprotein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:57", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "41e0b222a4109a63fd5af603cbe1976d", 
+        "phylo_model": "626f491a2fc20cdb4e5448300c0b35de", 
+        "tree": "b1b633534a24991031b518ca9d1ea863", 
+        "tree_stats": "0f56889e0fec2ae39de861b72e7ee136"
+    }
+}

@@ -1,0 +1,18 @@
+Command: fasttree -log /home/max/PycharmProjects/SARS-CoV-2/data/phylo/orf7b_protein.log -out /home/max/PycharmProjects/SARS-CoV-2/data/phylo/orf7b_protein.newick /home/max/PycharmProjects/SARS-CoV-2/data/alignments/orf7b_protein.fasta
+FastTree Version 2.1.11 Double precision (No SSE3)
+Alignment: /home/max/PycharmProjects/SARS-CoV-2/data/alignments/orf7b_protein.fasta
+Amino acid distances: BLOSUM45 Joins: balanced Support: SH-like 1000
+Search: Normal +NNI +SPR (2 rounds range 10) +ML-NNI opt-each=1
+TopHits: 1.00*sqrtN close=default refresh=0.80
+ML Model: Jones-Taylor-Thorton, CAT approximation with 20 rate categories
+Read 1 sequences, 43 positions
+NJ	(BCD58759:0.000000000);
+ME_SPR1	(BCD58759:0.000000000);
+ME_SPR2	(BCD58759:0.000000000);
+ME_Lengths	(BCD58759:0.000000000);
+Total branch-length 0.000 after 0.00 sec
+Total time: 0.00 seconds Unique: 1/1 Bad splits: 0/0
+Dist/N**2: by-profile 1.000 (out 1.000) by-leaf 0.000 avg-prof 0.000
+ Hill-climb: 0 Update-best: 0
+NNI: 0 SPR: 0 ML-NNI: 0
+TreeCompleted

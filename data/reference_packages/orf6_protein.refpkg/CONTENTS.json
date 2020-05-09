@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "orf6_protein.fasta", 
+        "phylo_model": "phylo_modelsSUW_L.json", 
+        "tree": "orf6_protein.newick", 
+        "tree_stats": "orf6_protein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:56", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "aba019e4742c78cabcb578d5628e2cc2", 
+        "phylo_model": "3c525c32b50bb86e10426e371dc7660d", 
+        "tree": "6aa8a35f105cb7af9426cf92842168f9", 
+        "tree_stats": "5b5df983f33d0446fe8829e008de1418"
+    }
+}

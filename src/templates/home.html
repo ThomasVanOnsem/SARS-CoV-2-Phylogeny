@@ -1,0 +1,29 @@
+{% extends "general_layout.html" %}
+
+{% block page %}
+<section class="section">
+    <h1 class="title is-1">Phylogenetic trees</h1>
+</section>
+<section class="section">
+
+    <h2 class="subtitle is-2">Intro</h2>
+    <p class="content is-medium">Our project is related to the lesson about phylogenetic trees. We applied this to 
+    variants of the coronavirus. The results are accessible through this website and there are also some added features. 
+    There is also a theorethical analysis wich has been written in a small paper.</p>
+    
+</section>
+<section class="section">
+
+    <h2 class="subtitle is-2">What can you find on each page</h2>
+    
+    <h3 class="subtitle is-4">results</h3>
+    <p class="content is-medium">On the results tab you can view the calculated phylogenetic trees for each protein of which their are enough samples to have a trustworthy representation. At the bottom there is an interactive representation of the generated tree. By clicking on one of the endpoints you can see more information about this variant. Next to the information of the variant there is also some information about the selected protein and its purpose within the virus.</p>
+    <p class="content is-medium">On this page there is also a possibility to add new variants of certain proteines to the data. These will be added and the phylogenetic tree will be recalculated. There are two ways to add data. The first is for if you have the sequence of the protein in dna and now its position in the dna string. The second method is for if you have the attained amino acids but not the dna sequence. You can switch between these two options by a toggle on the top left</p>
+
+    <h3 class="subtitle is-4">project</h3>
+    <p class="content is-medium">The project tab is not a page on this website but a link to the github repository of this project.</p>
+
+</section>
+
+{% endblock %}
+

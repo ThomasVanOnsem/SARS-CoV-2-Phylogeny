@@ -1,1 +1,0 @@
-When new viruses try to escape a cell, the cell can snare them with proteins called tetherin. Some research suggests that ORF7a cuts down an infected cell’s supply of tetherin, allowing more of the viruses to escape. Researchers have also found that the protein can trigger infected cells to commit suicide (apoptosis) — which contributes to the damage Covid-19 causes to the lungs.

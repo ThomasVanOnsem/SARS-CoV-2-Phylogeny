@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "chain_c.fasta", 
+        "phylo_model": "phylo_modelhYQNbq.json", 
+        "tree": "chain_c.newick", 
+        "tree_stats": "chain_c.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:58", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "d6719f30cd49bc95b1ef4da5d98f3045", 
+        "phylo_model": "00b01938a9dfe84569f2d232c41dc8e9", 
+        "tree": "36128e9224e51ddaddc683467e4e5d50", 
+        "tree_stats": "ff484cc651a2559dbd0161f937712e3e"
+    }
+}

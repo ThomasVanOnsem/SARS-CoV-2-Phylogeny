@@ -1,0 +1,51 @@
+.main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    margin-bottom: 112px;
+}
+
+.navbar{
+    background-color: ghostwhite;
+    min-height: 4rem;
+    align-content: center;
+
+}
+
+.navbar-container{
+    white-space: nowrap;
+    overflow: hidden;
+    width: 570px;
+}
+
+.navbar-item img{
+    max-height: 2.9rem;
+}
+
+.navbar-item{
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+.description{
+    color: lightgray;
+    font-style: italic;
+}
+
+.file.is-boxed .file-cta{
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+.column{
+    overflow: hidden;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem 3rem;
+}

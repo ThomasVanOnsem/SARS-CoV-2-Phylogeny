@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "orf3a_protein.fasta", 
+        "phylo_model": "phylo_modelVz6M_K.json", 
+        "tree": "orf3a_protein.newick", 
+        "tree_stats": "orf3a_protein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:55", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "8c6d2c3fd10a2e1ccf31bed46543c301", 
+        "phylo_model": "ab2bf41bcea0c8710671b2f887cbbb31", 
+        "tree": "70c5945dc584ec57a6bdb5991333588c", 
+        "tree_stats": "6e49a5ba4fcb41963cd67f145e29cf79"
+    }
+}

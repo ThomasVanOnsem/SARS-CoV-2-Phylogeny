@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "envelope_protein.fasta", 
+        "phylo_model": "phylo_modelgJ5FAN.json", 
+        "tree": "envelope_protein.newick", 
+        "tree_stats": "envelope_protein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:56", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "1c9d5e30862960dca140d62a131252bf", 
+        "phylo_model": "9f630bb2e3a01f5262c3f9b74ae978c0", 
+        "tree": "8c18d16063f2d6522ec5497eaa397c16", 
+        "tree_stats": "2c4e3dbae62afa7fa40825b94cd67591"
+    }
+}

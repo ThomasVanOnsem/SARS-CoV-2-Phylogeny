@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "nucleocapsid_protein.fasta", 
+        "phylo_model": "phylo_modelAVzxAc.json", 
+        "tree": "nucleocapsid_protein.newick", 
+        "tree_stats": "nucleocapsid_protein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:59", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "e03faaf749bf2a389f738abcb03d9d81", 
+        "phylo_model": "baadb318b6b61aa58404a8c917c85dbf", 
+        "tree": "47a9d5768e3fcfd9d3ecd00b1b427f89", 
+        "tree_stats": "4c022f568f13e5aed93a9ca8f2f26bc3"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "membrane_glycoprotein.fasta", 
+        "phylo_model": "phylo_modelDekRdQ.json", 
+        "tree": "membrane_glycoprotein.newick", 
+        "tree_stats": "membrane_glycoprotein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:56", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "051848c50793e102943a49309bd0861e", 
+        "phylo_model": "7ad2c72501522941ebe9aafbe13024a6", 
+        "tree": "04b1ab5e16dd0f161260985df989878b", 
+        "tree_stats": "e7aa9ddaa5afdfdc1673dc5dbbc55351"
+    }
+}

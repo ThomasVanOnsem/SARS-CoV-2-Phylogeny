@@ -1,0 +1,38 @@
+Command: fasttree -log /home/max/PycharmProjects/SARS-CoV-2/data/phylo/nucleocapsid_protein.log -out /home/max/PycharmProjects/SARS-CoV-2/data/phylo/nucleocapsid_protein.newick /home/max/PycharmProjects/SARS-CoV-2/data/alignments/nucleocapsid_protein.fasta
+FastTree Version 2.1.11 Double precision (No SSE3)
+Alignment: /home/max/PycharmProjects/SARS-CoV-2/data/alignments/nucleocapsid_protein.fasta
+Amino acid distances: BLOSUM45 Joins: balanced Support: SH-like 1000
+Search: Normal +NNI +SPR (2 rounds range 10) +ML-NNI opt-each=1
+TopHits: 1.00*sqrtN close=default refresh=0.80
+ML Model: Jones-Taylor-Thorton, CAT approximation with 20 rate categories
+Read 3 sequences, 419 positions
+NJ	(QII87775:0.005833121,QIC53221:0.005833121,QII87776:-0.005833121);
+ME_NNI1	(QII87775:0.005833121,QIC53221:0.005833121,QII87776:-0.005833121);
+Min_evolution NNIs converged at round 1 -- skipping some rounds
+ME_SPR1	(QII87775:0.005833121,QIC53221:0.005833121,QII87776:-0.005833121);
+ME_NNI3	(QII87775:0.005833121,QIC53221:0.005833121,QII87776:-0.005833121);
+Min_evolution NNIs converged at round 3 -- skipping some rounds
+ME_SPR2	(QII87775:0.005833121,QIC53221:0.005833121,QII87776:-0.005833121);
+ME_NNI5	(QII87775:0.005833121,QIC53221:0.005833121,QII87776:-0.005833121);
+Min_evolution NNIs converged at round 5 -- skipping some rounds
+ME_Lengths	(QII87775:0.007627637,QIC53221:0.007627637,QII87776:-0.007627637);
+Total branch-length 0.023 after 0.00 sec
+ML_Lengths1	(QII87775:0.006874899,QIC53221:0.007627637,QII87776:0.000000005);
+ML_NNI1	(QII87775:0.006874899,QIC53221:0.007627637,QII87776:0.000000005);
+TreeLogLk	ML_NNI1	-1223.8382	MaxChange	0.0000
+NCategories	20
+Rates 0.080099 0.109794 0.150497 0.206291 0.282768 0.387597 0.531289 0.728252 0.998234 1.368304 1.875570 2.570891 3.523987 4.830419 6.621179 9.075819 12.440458 17.052454 23.374236 32.039664
+SiteCategories 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 10 10 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+ML_NNI2	(QII87775:0.006874899,QIC53221:0.007627637,QII87776:0.000000005);
+TreeLogLk	ML_NNI2	-1223.2160	MaxChange	0.0000
+Turning off heuristics for final round of ML NNIs (converged)
+ML_NNI3	(QII87775:0.006874899,QIC53221:0.007627637,QII87776:0.000000005);
+TreeLogLk	ML_NNI3	-1223.2160	MaxChange	0.0000
+ML_Lengths2	(QII87775:0.006838414,QIC53221:0.007627637,QII87776:0.000000005);
+TreeLogLk	ML_Lengths2	-1223.2160
+Total time: 0.01 seconds Unique: 3/3 Bad splits: 0/0
+Dist/N**2: by-profile 1.667 (out 0.333) by-leaf 1.000 avg-prof 0.000
+ Hill-climb: 0 Update-best: 0
+NNI: 0 SPR: 0 ML-NNI: 0
+Max-lk operations: lk 144 posterior 36 approximate-posteriors 0.00% star-only 0
+TreeCompleted

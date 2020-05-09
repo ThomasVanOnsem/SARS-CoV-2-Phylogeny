@@ -1,1 +1,0 @@
-ORF7b overlaps the same stretch of RNA as ORF7a, but it’s not clear what the gene does – if it even does anything at all.

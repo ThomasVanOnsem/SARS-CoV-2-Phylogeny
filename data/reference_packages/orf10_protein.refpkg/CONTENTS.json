@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "orf10_protein.fasta", 
+        "phylo_model": "phylo_modelfszNMN.json", 
+        "tree": "orf10_protein.newick", 
+        "tree_stats": "orf10_protein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:54", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "01e7f5aef98c4f964164aa2c3828968c", 
+        "phylo_model": "1c8e05e75bb39f3284d81b730cae9cc2", 
+        "tree": "740eff29d71c1aa0060b4b846d5aaff6", 
+        "tree_stats": "a3d419af02bc52cea589d6bfa21a9d15"
+    }
+}

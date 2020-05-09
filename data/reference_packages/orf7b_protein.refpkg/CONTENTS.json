@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "orf7b_protein.fasta", 
+        "phylo_model": "phylo_modelKlalNg.json", 
+        "tree": "orf7b_protein.newick", 
+        "tree_stats": "orf7b_protein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:59", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "df355968bf4991e74989cbe8857aea92", 
+        "phylo_model": "62e112f1347510c82f8348547a03a8ed", 
+        "tree": "9af962eb344f5bef0419ad514d9f45ae", 
+        "tree_stats": "87f7a2e8a250b8ea4ab4dbf26153de3b"
+    }
+}

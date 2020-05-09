@@ -1,0 +1,8 @@
+{
+    "Price-CAT": {}, 
+    "empirical_frequencies": false, 
+    "datatype": "AA", 
+    "subs_model": "JTT", 
+    "program": "FastTree Version 2.1.11 Double precision (No SSE3)", 
+    "ras_model": "Price-CAT"
+}

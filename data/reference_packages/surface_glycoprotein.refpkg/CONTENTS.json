@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "surface_glycoprotein.fasta", 
+        "phylo_model": "phylo_modelvfoL6l.json", 
+        "tree": "surface_glycoprotein.newick", 
+        "tree_stats": "surface_glycoprotein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:55", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "f20238108ba17b1fc996e6c538717189", 
+        "phylo_model": "587e3a53fb9f85112f660b1445256226", 
+        "tree": "6f2cf30ece518aa6c7d24baba9e84f84", 
+        "tree_stats": "35e2cb0148105b8a00b333d3f4d3ac9d"
+    }
+}

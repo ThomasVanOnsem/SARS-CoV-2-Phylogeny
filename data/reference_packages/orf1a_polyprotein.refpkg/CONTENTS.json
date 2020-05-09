@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "orf1a_polyprotein.fasta", 
+        "phylo_model": "phylo_modelQsnxFO.json", 
+        "tree": "orf1a_polyprotein.newick", 
+        "tree_stats": "orf1a_polyprotein.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:54", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "b0167226a1eb8d6a104bc85a8da9bcfc", 
+        "phylo_model": "d88f13c1410ec7f5d57f1796251e7e37", 
+        "tree": "5caa999bf237787cb56cc054c461d990", 
+        "tree_stats": "e76d5e3214bf8701b08fb0205f1134ff"
+    }
+}

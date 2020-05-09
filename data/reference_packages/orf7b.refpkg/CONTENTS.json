@@ -1,0 +1,25 @@
+{
+    "files": {
+        "aln_fasta": "orf7b.fasta", 
+        "phylo_model": "phylo_modelr1oSCr.json", 
+        "tree": "orf7b.newick", 
+        "tree_stats": "orf7b.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2020-05-09 17:01:54", 
+        "format_version": "1.1", 
+        "locus": "16s_rRNA"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "aln_fasta": "9a0ec865aa5b13916edb60d65865762e", 
+        "phylo_model": "e7c1e9fd86787078dcfdf73571b3e8c8", 
+        "tree": "c3d3c91d832af0affcd436e71a6aeb81", 
+        "tree_stats": "e20ed98ee60fb54eab1fddeed148f08f"
+    }
+}
