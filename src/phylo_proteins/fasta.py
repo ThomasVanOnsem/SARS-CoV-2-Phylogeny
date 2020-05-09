@@ -2,22 +2,26 @@ from Bio import SeqIO
 from phylo_proteins.model import Samples, Protein
 
 
-def parseFasta(name, samples=Samples()):
+def parseFasta(name, nucleotides=False):
     """
     Function that parses a fasta file into a Samples object.
+    :param nucleotides: boolean, indicates if nucleotides or proteins
     :param name: str, filename of the file we wish to parse
-    :param samples: Samples object to contain all sequences.
     :return: Samples, the samples that are specified in the file
     """
-    samples = samples
+    samples = Samples()
     with open(name) as file:
         for record in SeqIO.parse(file, "fasta"):
-            proteinName = getProteinName(record)
-            proteinSequence = SeqIO.SeqRecord(record.seq, id=record.id, name=proteinName)
-            origin = getOrigin(record)
-            protein = Protein(proteinName, proteinSequence, origin)
             ID = getID(record)
-            samples.getSample(ID).addProtein(protein)
+            if nucleotides:
+                genomeSequence = SeqIO.SeqRecord(record.seq, id=record.id, name=record.id)
+                samples.getSample(ID).addGenome(genomeSequence)
+            else:
+                proteinName = getProteinName(record)
+                proteinSequence = SeqIO.SeqRecord(record.seq, id=record.id, name=proteinName)
+                origin = getOrigin(record)
+                protein = Protein(proteinName, proteinSequence, origin)
+                samples.getSample(ID).addProtein(protein)
     return samples
 
 

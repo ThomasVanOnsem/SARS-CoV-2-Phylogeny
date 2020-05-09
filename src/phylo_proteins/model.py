@@ -17,14 +17,24 @@ class Sample:
         :param name: string that indicates the name of the Sample
         """
         self.name = name
-        self.proteins = {}
+        self.parts = {}
+        self.hasGenome = False
+
+    def addGenome(self, sequenceRecord):
+        """ Adds the given sequenceRecord to the sample as the genome """
+        self.parts['genome'] = sequenceRecord
+        self.hasGenome = True
+
+    def getGenome(self):
+        """ Returns the genome if present, None otherwise """
+        return self.parts.get('genome')
 
     def addProtein(self, protein):
         """
         Method that adds a protein to this sample
         :param protein: the protein that we want to add to the sample
         """
-        self.proteins[protein.name] = protein
+        self.parts[protein.name] = protein
 
     def getProtein(self, name):
         """
@@ -32,14 +42,14 @@ class Sample:
         :param name: name of the protein we want to retrieve
         :return: Protein, the protein associated with the name
         """
-        return self.proteins.get(name)
+        return self.parts.get(name)
 
     def getProteinsAsList(self):
         """
         Method that returns all proteins in this genome in the form of a list.
         :return: list[Protein], a list of all the proteins in this genome
         """
-        return list(self.proteins.values())
+        return list(self.parts.values())
 
 
 class Samples:
