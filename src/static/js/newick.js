@@ -9,7 +9,7 @@ function getNewick() {
     var draw = SVG().addTo('#newick-graph').size(width.toString(), height.toString());
 
     var proteinName = $('select#proteinChoice option:checked').val();
-    var callUrl = '/data/newick/' + 'fast';
+    var callUrl = '/data/newick/' + String(proteinName);
 
     $.ajax({
         url: callUrl,

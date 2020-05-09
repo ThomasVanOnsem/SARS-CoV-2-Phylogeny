@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
+from config import config
+from tools import getDataLocation
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
@@ -32,10 +34,8 @@ def getImage(protein):
 
 @app.route("/data/newick/<protein>")
 def getNewick(protein):
-    newick = app.config["RESULT_FOLDER"] + 'newick/' + protein + '.newick'
-
+    newick = getDataLocation(f'phylo/{protein}.newick')
     newick_json = convert_newick_json(newick)
-
     return jsonify(newick_json)
 
 @app.route("/data/info/<protein>")

@@ -24,3 +24,19 @@ virtualenv -p /usr/bin/python2.7 taxit_venv
 source taxit_venv/bin/activate
 pip install taxtastic
 ```
+
+
+## Run
+
+
+#### Troubleshooting
+
+If making a placement result in an error such as 
+```
+loadlocale.c:129: _nl_intern_locale_data: Assertion `cnt < (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))' failed.
+```
+
+Open a shell and set the language locale
+```
+LANG=/usr/lib/locale/en_US
+```

@@ -7,6 +7,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from phylo.align import alignOne
 from config import config
+from src import getDataLocation
 
 
 def makeReferencePackage(treeFile, alignmentFile, logFile, output):
@@ -22,32 +23,31 @@ def makeReferencePackage(treeFile, alignmentFile, logFile, output):
 
 
 def makeTempDirectory():
-    tmpDirectory = path.join(config['data-directory'], 'tmp')
+    tmpDirectory = getDataLocation('tmp')
     check_call(['mkdir', '-p', tmpDirectory])
-    return tmpDirectory
 
 
 def makePlacement(proteinName: str, sequence: str, ID: str):
     sequence = SeqRecord(seq=Seq(sequence.replace('\n', '')), id=ID, description='')
 
     proteinName = proteinName.replace(' ', '_')
-    tmpDirectory = makeTempDirectory()
+    makeTempDirectory()
 
     # Use the hash of the sequence so multiple users can make placements at the same time
     sequenceHash = str(sequence).__hash__()
 
     # Write the input sequence in a tmp file
-    inputSequenceFile = path.join(tmpDirectory, f'{sequenceHash}.fasta')
+    inputSequenceFile = getDataLocation(f'tmp/{sequenceHash}.fasta')
     SeqIO.write(sequence, inputSequenceFile, 'fasta')
 
     # Align the sequence against the reference alignment
-    referenceAlignmentFile = path.join(config['data-directory'], f'alignments/{proteinName}.fasta')
-    mergedAlignmentFile = path.join(tmpDirectory, f'merged_{sequenceHash}.fasta')
+    referenceAlignmentFile = getDataLocation(f'alignments/{proteinName}.fasta')
+    mergedAlignmentFile = getDataLocation(f'tmp/merged_{sequenceHash}.fasta')
     alignOne(inputSequenceFile, referenceAlignmentFile, mergedAlignmentFile)
 
     # Make placement using pplacer
-    packageFile = path.join(config['data-directory'], f'reference_packages/{proteinName}.refpkg')
-    placementFile = path.join(tmpDirectory, f'placement_{sequenceHash}.jplace')
+    packageFile = getDataLocation(f'tmp/reference_packages/{proteinName}.refpkg')
+    placementFile = getDataLocation(f'tmp/placement_{sequenceHash}.jplace')
     cmd = f'../lib/pplacer -o {placementFile} -c {packageFile} {mergedAlignmentFile}'
     check_call(cmd, shell=True)
 
@@ -60,6 +60,3 @@ def makePlacement(proteinName: str, sequence: str, ID: str):
     os.remove(placementFile)
 
     return placement
-
-
-    # call(['LANG=/usr/lib/locale/en_US'])
