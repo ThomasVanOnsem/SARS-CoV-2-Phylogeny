@@ -6,7 +6,6 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from phylo.align import alignOne
-from config import config
 from src import getDataLocation
 
 
@@ -46,8 +45,10 @@ def makePlacement(proteinName: str, sequence: str, ID: str):
     alignOne(inputSequenceFile, referenceAlignmentFile, mergedAlignmentFile)
 
     # Make placement using pplacer
-    packageFile = getDataLocation(f'tmp/reference_packages/{proteinName}.refpkg')
+    packageFile = getDataLocation(f'reference_packages/{proteinName}.refpkg')
     placementFile = getDataLocation(f'tmp/placement_{sequenceHash}.jplace')
+    # To prevent crash in pplacer
+    os.environ['LANG'] = '/usr/lib/locale/en_US'
     cmd = f'../lib/pplacer -o {placementFile} -c {packageFile} {mergedAlignmentFile}'
     check_call(cmd, shell=True)
 
