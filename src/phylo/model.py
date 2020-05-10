@@ -17,24 +17,23 @@ class Sample:
         :param name: string that indicates the name of the Sample
         """
         self.name = name
-        self.parts = {}
-        self.hasGenome = False
+        self.proteins = {}
+        self.genome = None
 
     def addGenome(self, sequenceRecord):
         """ Adds the given sequenceRecord to the sample as the genome """
-        self.parts['genome'] = sequenceRecord
-        self.hasGenome = True
+        self.genome = sequenceRecord
 
     def getGenome(self):
-        """ Returns the genome if present, None otherwise """
-        return self.parts.get('genome')
+        """ Returns the genome """
+        return self.genome
 
     def addProtein(self, protein):
         """
         Method that adds a protein to this sample
         :param protein: the protein that we want to add to the sample
         """
-        self.parts[protein.name] = protein
+        self.proteins[protein.name] = protein
 
     def getProtein(self, name):
         """
@@ -42,14 +41,14 @@ class Sample:
         :param name: name of the protein we want to retrieve
         :return: Protein, the protein associated with the name
         """
-        return self.parts.get(name)
+        return self.proteins.get(name)
 
     def getProteinsAsList(self):
         """
         Method that returns all proteins in this genome in the form of a list.
         :return: list[Protein], a list of all the proteins in this genome
         """
-        return list(self.parts.values())
+        return list(self.proteins.values())
 
 
 class Samples:
@@ -103,9 +102,23 @@ class Samples:
                     sequencesUsed[protein.name].add(sequenceStr)
         return sequences
 
+    def getGenomeSequences(self):
+        sequences = list()
+        sequencesUsed = set()
+        for sample in self.getSamplesAsList():
+            genome = sample.getGenome()
+            if not genome:
+                continue
+            sequenceStr = str(genome.seq)
+            # Skip duplicate sequences for a better looking tree
+            if sequenceStr not in sequencesUsed:
+                sequences.append(genome)
+                sequencesUsed.add(sequenceStr)
+        return sequences
+
     def getProteinSequences(self, proteinName):
         """
-        Function that gets sequences of a certain protein from possible multiple genomes.
+        Gets sequences of a certain protein from possible multiple genomes.
         :param proteinName: str, the name of the protein we want the sequences of
         :return: list of SeqRecord's, the sequences we found and associated with their respective genome
         """

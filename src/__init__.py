@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
-from config import config
 from tools import getDataLocation
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
