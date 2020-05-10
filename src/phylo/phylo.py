@@ -2,8 +2,7 @@ from phylo.align import align
 from phylo.model import Samples
 from Bio.Phylo.Applications import FastTreeCommandline
 from Bio import SeqIO
-from os import path
-from config import config
+from tools import getDataLocation
 from phylo.placement import makeReferencePackage
 
 
@@ -38,18 +37,18 @@ def processNucleotideSamples(samples: Samples):
 
 
 def constructTreeFromSequences(sequences, filename, nucleotide=False):
-    sequencesFile = path.join(config['data-directory'], f'sequences/{filename}.fasta')
+    sequencesFile = getDataLocation(f'sequences/{filename}.fasta')
     SeqIO.write(sequences, sequencesFile, 'fasta')
 
     print('Aligning')
-    alignmentFile = path.join(config['data-directory'], f'alignments/{filename}.fasta')
+    alignmentFile = getDataLocation(f'alignments/{filename}.fasta')
     align(sequencesFile, alignmentFile)
 
     print('Constructing tree')
-    treeFile = path.join(config['data-directory'], f'phylo/{filename}.newick')
-    logFile = path.join(config['data-directory'], f'phylo/{filename}.log')
+    treeFile = getDataLocation(f'phylo/{filename}.newick')
+    logFile = getDataLocation(f'phylo/{filename}.log')
     constructTree(alignmentFile, treeFile, logFile, nucleotide=nucleotide)
 
     print('Making reference package')
-    packageFile = path.join(config['data-directory'], f'reference_packages/{filename}.refpkg')
+    packageFile = getDataLocation(f'reference_packages/{filename}.refpkg')
     makeReferencePackage(treeFile, alignmentFile, logFile, packageFile)
