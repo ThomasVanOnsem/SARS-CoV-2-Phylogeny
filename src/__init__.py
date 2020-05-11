@@ -3,13 +3,14 @@ import os
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
 from tools import getDataLocation
+from src.phylo.placement import *
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
 app = Flask(__name__)
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 app.config['UPLOAD_FOLDER'] = '../data/'
-app.config['RESULT_FOLDER'] = os.path.join(THIS_FOLDER,'static/results/phylo/')
+app.config['RESULT_FOLDER'] = os.path.join(THIS_FOLDER, 'static/results/phylo/')
 app.config['EXPLANATION_FOLDER'] = os.path.join(THIS_FOLDER, 'static/protein_explanations/')
 
 
@@ -20,22 +21,18 @@ def homepage(image_location=None):
     else:
         return render_template('home.html')
 
+
 @app.route("/data/")
 def viewData():
     return render_template('results.html')
 
-@app.route("/data/view/<protein>")
-def getImage(protein):
-    # the link start at the www file
-    image = '/static/results/phylo/' + protein + '.png'
-
-    return jsonify({'image': image})
 
 @app.route("/data/newick/<protein>")
 def getNewick(protein):
     newick = getDataLocation(f'phylo/{protein}.newick')
     newick_json = convert_newick_json(newick)
     return jsonify(newick_json)
+
 
 @app.route("/data/info/<protein>")
 def getInfoProtein(protein):
@@ -48,6 +45,7 @@ def getInfoProtein(protein):
         info["explanation"] = ""
 
     return jsonify(info)
+
 
 @app.route("/data/info/protein/<variant>")
 def getInfoVariant(variant):
@@ -62,10 +60,12 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/submit-data', methods=['POST'])
+@app.route('/submit-data', methods=['GET', 'POST'])
 def submit_data():
     """Generate for a file."""
-    f = request.files['file']
+    data = request.form  # TODO files
+    makePlacement(proteinName=data['protein'], sequence=data['sequence'], ID=data['id'])
+    """f = request.files['file']
     sequence = request.form['sequence-text']
     filename = ""
     if f and allowed_file(f.filename):
@@ -80,7 +80,7 @@ def submit_data():
     if sequence:
         # generateProteinPhylo(sequence)
         return redirect(url_for('homepage'))
-    return jsonify({'success': False, 'file': filename}), 400, {'ContentType': 'application/json'}
+    return jsonify({'success': False, 'file': 0}), 400, {'ContentType': 'application/json'}"""
 
 
 if __name__ == "__main__":

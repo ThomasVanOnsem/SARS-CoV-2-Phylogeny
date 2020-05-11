@@ -1,37 +1,77 @@
-$(window).ready(function(){
-    getStoredSequences();
-});
-
-
-let sequences;
-
-
-function getStoredSequences() {
-    let request = new XMLHttpRequest();
-    request.open('GET', '/get-stored-sequences', true);
-    request.onload = function() {
-        let data = JSON.parse(this.response);
-        if (request.status >= 200 && request.status < 400) {
-            sequences = data;
-            populateSequenceChoices();
-        } else {
-            console.log('Failed to fetch stored sequences!');
-        }
-    };
-    request.send();
-}
-
-function populateSequenceChoices() {
-    let select = document.getElementById("sequence-choices");
-    for(let i=0; i<sequences.length; i++){
-        let option = document.createElement("option");
-        option.value = sequences[i]; //TODO correct read
-        select.appendChild(option);
+function addPlacementForm() {
+    let div = document.getElementById("add-data");
+    if(div.style.display === ''){
+        div.style['display'] = 'none';
+        document.getElementById('submit-btn').innerText = 'View';
     }
-    //TODO show in text area
+    else{
+        div.style.display = '';
+        document.getElementById('submit-btn').innerText = 'Add Data';
+    }
 }
 
-function addProgressBar() {
-    let div = document.getElementById("progress-bar-div")
+function triggerToggleAdd(event){
+	event.preventDefault();
+	var options = $('#type-sequence-input').children();
+	options.each(function () {
+		$(this).blur()
+		if ($(this).hasClass('is-selected')) {
+			$(this).removeClass('is-selected');
+			$(this).removeClass('is-primary');
+		} else {
+			$(this).addClass('is-selected');
+			$(this).addClass('is-primary');
 
+			//now we change the page
+			if($(this).attr('id') === 'choose-nuc'){
+				$('#nucleotide-adding').attr('style', '');
+				$('#amino-acid-adding').attr('style', 'display:none;');
+			} else {
+				$('#nucleotide-adding').attr('style', 'display:none;');
+				$('#amino-acid-adding').attr('style', '');
+			}
+		}
+	})
+}
+
+function sendData() {
+	let div = document.getElementById("add-data");
+	if(div.style.display !== ''){
+		return;
+	}
+
+	let proteinName = $('select#proteinChoice option:checked').val();
+	let gen_options = document.getElementsByName('gen-option');
+	let gen_option;
+	for(let i = 0; i < gen_options.length; i++) {
+		if(gen_options[i].checked)
+			gen_option = gen_options[i].value;
+	}
+
+	let id;
+	let origin;
+	let sequence;
+	if(document.getElementById("choose-nuc").classList.contains('is-selected')){
+		id = document.getElementById("nucleo-id").value;
+		origin = document.getElementById("nucleo-origin").value;
+		sequence = document.getElementById("nucleo-seq").value;
+	}
+	else{
+		id = document.getElementById("amino-id").value;
+		origin = document.getElementById("amino-origin").value;
+		sequence = document.getElementById("amino-seq").value;
+	}
+
+	$.ajax({
+		type: 'POST',
+        url: '/submit-data',
+		data: {
+			'protein': proteinName,
+			'file': 0,
+			'gen-option': gen_option,
+			'id': id,
+			'origin': origin,
+			'sequence': sequence
+		},
+    })
 }

@@ -1,29 +1,206 @@
 {% extends "general_layout.html" %}
 
+{% block scriptIncludes %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script src="{{ url_for('static', filename='js/newick.js') }}"></script>
+{% endblock %}
+
 {% block page %}
 <section class="section">
-    <h1 class="title is-1">Phylogenetic trees</h1>
+    <div class="columns">
+        <div class="column is-half">
+            <span class="description">Choose a protein to view: <i class="far fa-question-circle info-icon"></i></span>
+                <form id="submit-form-data" onsubmit="updateDoc(event)">
+                    <div class="container">
+                        <div class="field select">
+                            <select id="proteinChoice">
+                                <!--<option value="chain_a">Chain A</option>
+                                <option value="chain_b">Chain B</option>
+                                <option value="chain_c">Chain C</option>-->
+                                <option value="envelope_protein">Envelope Protein</option>
+                                <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
+                                <option value="nucleocapsid_phosphoprotein">Nucleocapsid Phosphoprotein</option>
+                                <option value="orf1a_polyprotein">Orf1a Polyprotein</option>
+                                <option value="orf1ab_polyprotein">Orf1ab Polyprotein</option>
+                                <option value="orf3a_protein">Orf3a Protein</option>
+                                <option value="orf6_protein">Orf6 Protein</option>
+                                <option value="orf7a_protein">Orf7a Protein</option>
+                                <option value="orf7b">Orf7b Protein</option>
+                                <option value="orf8_protein">Orf8 Protein</option>
+                                <option value="orf10_protein">Orf10 Protein</option>
+                                <option value="surface_glycoprotein">Surface Glycoprotein</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="button is-white" onclick="addPlacementForm()" style="margin-top: 0.8rem;margin-bottom: 0.8rem;" type="button">
+                        <span><i class="fas fa-plus" style="margin-right: 0.6rem;"></i>Add data</span>
+                    </button>
+                    <div id="add-data" class="" style="display: none;">
+
+                        <div id="type-sequence-input" class="buttons has-addons">
+                            <button id="choose-nuc" class="button toggle-button is-primary is-selected" onclick="triggerToggleAdd(event)">Nucleotides</button>
+                            <button id="choose-ac" class="button toggle-button" onclick="triggerToggleAdd(event)">Amino Acids</button>
+                        </div>
+
+                        <div id="nucleotide-adding">
+                            <p class="description">Add a new variant of the SARS-CoV2 DNA sequence to the tree:</p>
+                            <br>
+                            <div class="columns">
+                                <div class="column is-one-third">
+                                    <input id="nucleo-id" class="input" type="text" placeholder="Identifier e.g. NC_045512.2 (required)">
+                                </div>
+                                <div class="column is-one-third">
+                                    <input id="nucleo-origin" class="input" type="text" placeholder="Origin of sample (not required)">
+                                </div>
+                            </div>
+                            <div class="field columns">
+                                <div class="column is-8 control is-medium">
+                                    <label>
+                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="sequence-text" rows="3"></textarea>
+                                    </label>
+                                </div>
+                                <div class="column is-1" style="text-align: center;padding-top: 3rem;">
+                                    <span>-Or-</span>
+                                </div>
+                                <div class="column is-3 is-desktop">
+                                    <div id="upload-zone-nuc" class="">
+                                        <div class="file has-name is-boxed is-medium">
+                                            <label class="file-label">
+                                                <input class="file-input" type="file" name="file">
+                                                <span class="file-cta">
+                                                    <span class="file-icon"><i class="fas fa-upload"></i></span>
+                                                    <span class="file-label">Choose a file…</span>
+                                                </span>
+                                                <span class="file-name"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="amino-acid-adding" style="display:none;">
+                            <p class="description">Add a new amino acid sequence of SARS-CoV2 to the tree:</p>
+                            <br>
+                            <div class="columns">
+                                <div class="column is-one-third">
+                                    <input id="amino-id" class="input" type="text" placeholder="Identifier e.g. YP_009742610 (required)">
+                                </div>
+                                <div class="column is-one-third">
+                                    <input id="amino-origin" class="input" type="text" placeholder="Origin of sample (not required)">
+                                </div>
+                            </div>
+                            <div class="field columns">
+                                <div class="column is-8 control is-medium">
+                                    <label>
+                                        <textarea id="amino-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="sequence-text" rows="3"></textarea>
+                                    </label>
+                                </div>
+                                <div class="column is-1" style="text-align: center;padding-top: 3rem;">
+                                    <span>-Or-</span>
+                                </div>
+                                <div class="column is-3 is-desktop">
+                                    <div id="upload-zone-amino" class="">
+                                        <div class="file has-name is-boxed is-medium">
+                                            <label class="file-label">
+                                                <input class="file-input" type="file" name="file">
+                                                <span class="file-cta">
+                                                    <span class="file-icon"><i class="fas fa-upload"></i></span>
+                                                    <span class="file-label">Choose a file…</span>
+                                                </span>
+                                                <span class="file-name"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="gen-option" value="pplacer">
+                                <span>Pplacer</span>
+                            </label>
+                            <i class="far fa-question-circle info-icon" style="margin-right: 0.5rem;"></i>
+                            <label class="radio">
+                                <input type="radio" name="gen-option" value="fasttree">
+                                FastTree
+                            </label>
+                            <i class="far fa-question-circle info-icon"></i>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="field">
+                        <p class="control">
+                            <button id="submit-btn" class="button is-primary" type="submit">View</button>
+                        </p>
+                    </div>
+                </form>
+        </div>
+
+        <div class="column is-half">
+            <div class="columns">
+                <div class="column is-half">
+                    <div class="card">
+                        <header class="card-header has-background-primary">
+                            <p class="card-header-title">Selected Node</p>
+                        </header>
+                        <div class="card-content">
+                            <div id="selectedNodeContent" class="content"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="card">
+                        <header class="card-header has-background-primary">
+                            <p class="card-header-title">Short Description Protein</p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content"><p id="protein-explanation"></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <div id="result-box" style="width:640px;height:480px;">
+                        <div id="newick-view">
+                            <div id="newick-graph"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
 </section>
-<section class="section">
 
-    <h2 class="subtitle is-2">Intro</h2>
-    <p class="content is-medium">Our project is related to the lesson about phylogenetic trees. We applied this to 
-    variants of the coronavirus. The results are accessible through this website and there are also some added features. 
-    There is also a theorethical analysis wich has been written in a small paper.</p>
-    
-</section>
-<section class="section">
-
-    <h2 class="subtitle is-2">What can you find on each page</h2>
-    
-    <h3 class="subtitle is-4">results</h3>
-    <p class="content is-medium">On the results tab you can view the calculated phylogenetic trees for each protein of which their are enough samples to have a trustworthy representation. At the bottom there is an interactive representation of the generated tree. By clicking on one of the endpoints you can see more information about this variant. Next to the information of the variant there is also some information about the selected protein and its purpose within the virus.</p>
-    <p class="content is-medium">On this page there is also a possibility to add new variants of certain proteines to the data. These will be added and the phylogenetic tree will be recalculated. There are two ways to add data. The first is for if you have the sequence of the protein in dna and now its position in the dna string. The second method is for if you have the attained amino acids but not the dna sequence. You can switch between these two options by a toggle on the top left</p>
-
-    <h3 class="subtitle is-4">project</h3>
-    <p class="content is-medium">The project tab is not a page on this website but a link to the github repository of this project.</p>
-
-</section>
 
 {% endblock %}
 
+{% block scripts %}
+<script>
+    function updateDoc (event) {
+        event.preventDefault();
+        sendData();
+        $('#selectedNodeContent').empty();
+        getNewick();
+    }
+    initializeScaleNewick();
+    initializeMoveNewick();
+</script>
+<script>
+    const fileInput = $('#upload-zone input[type=file]').eq(0);
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+          const fileName = $('#upload-zone .file-name').eq(0);
+          fileName.textContent = fileInput.files[0].name;
+        }
+    }
+</script>
+{% endblock %}
