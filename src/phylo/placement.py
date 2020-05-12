@@ -61,3 +61,35 @@ def makePlacement(proteinName: str, sequence: str, ID: str):
     os.remove(placementFile)
 
     return placement
+
+
+def placementToJsonVisualisation(placementJson):
+    indices = {
+        'like_weight_ratio': None,
+        'edge_num': None,
+        'distal_length': None,
+        'pendant_length': None
+    }
+
+    for index, field in enumerate(placementJson['fields']):
+        indices[field] = index
+
+    placements = []
+    for placement in placementJson['placements']:
+        for p in placement['p']:
+            placements.append({
+                'edge': p[indices['edge_num']],
+                'likelihood_percentage': p[indices['like_weight_ratio']],
+                'distal_length': p[indices['distal_length']],
+                'pendant_length': p[indices['pendant_length']]
+            })
+
+    from newick import convert_newick_json
+    with open('../data/example.jplace', 'w') as file:
+        json.dump(placementJson, file)
+
+    newick_json = convert_newick_json('../data/example.jplace', placement=True)
+
+    # TODO add placement to newick_json
+
+    return newick_json

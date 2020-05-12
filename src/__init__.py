@@ -34,6 +34,16 @@ def getNewick(protein):
     return jsonify(newick_json)
 
 
+@app.route('/placement', methods=['POST'])
+def makePlacement():
+    # TODO unfinished
+    data = request.get_json()
+    seq = data['seq']
+    placementJson = makePlacement('surface glycoprotein', seq.strip(), 'my_protein')
+    newickJson = placementToJsonVisualisation(placementJson)
+    return jsonify(newickJson)
+
+
 @app.route("/data/info/<protein>")
 def getInfoProtein(protein):
     info = {}
