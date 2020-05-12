@@ -1,4 +1,4 @@
-def construct_json(structure, newick_string, tree=None):
+def construct_json(structure, newick_string, tree=None, placement=False):
     depth = 0
 
     if tree is None:
@@ -11,6 +11,11 @@ def construct_json(structure, newick_string, tree=None):
             # not a leaf
             continue
         element_name, element_length = leaf_unf.split(':')
+        if placement:
+            element_length, node_index = element_length.split('{')
+            # Remove last curly bracket from index
+            node_index = node_index[:-1]
+            tree_element["index"] = node_index
 
         tree_element["name"] = element_name
         tree_element["length"] = element_length
@@ -25,11 +30,19 @@ def construct_json(structure, newick_string, tree=None):
         if end_length == len(element_name_length_str[1]): end_length = element_name_length_str[1].find(')')
         element_length = element_name_length_str[1][:end_length]
 
+        if placement:
+            # TODO element length is incorrect so following code will make it crash
+            pass
+            # element_length, node_index = element_length.split('{')
+            # # Remove last curly bracket from index
+            # node_index = node_index[:-1]
+            # tree_element["index"] = node_index
+
         #for inner nodes we don't insert names
         tree_element["length"] = element_length
         tree_element["children"] = {}
 
-        tree_element, newDepth = construct_json(child, newick_string, tree_element)
+        tree_element, newDepth = construct_json(child, newick_string, tree_element, placement=placement)
         if depth < newDepth:
             depth = newDepth
 
@@ -38,7 +51,7 @@ def construct_json(structure, newick_string, tree=None):
     return tree, depth+1
 
 #helperfunc to convert neweck to json (as this is more usefull for handling in jquery)
-def convert_newick_json(newick_file):
+def convert_newick_json(newick_file, placement=False):
     content = open(newick_file, "r")
     if content:
         newick_string = content.readline()
@@ -69,7 +82,7 @@ def convert_newick_json(newick_file):
         if current_node is None:
             return None
 
-        tree_json, depth = construct_json(current_node, newick_string)
+        tree_json, depth = construct_json(current_node, newick_string, placement=placement)
         #-2 because 1 for the top node and one because the root also adds one
         tree_json['depth'] = depth
         return tree_json
