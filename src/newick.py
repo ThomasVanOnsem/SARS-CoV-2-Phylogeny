@@ -26,8 +26,10 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         element_specification = newick_string[child["end"]+1:]
         element_name_length_str = element_specification.split(':')
         element_name = element_name_length_str[0]
-        end_length = element_name_length_str[1].find(';')
-        if end_length == len(element_name_length_str[1]): end_length = element_name_length_str[1].find(')')
+        #in the middle it is comma seperated only at the end point comma
+        end_length = element_name_length_str[1].find(',')
+        if end_length == -1: end_length = element_name_length_str[1].find(')')
+        if end_length == -1: end_length = element_name_length_str[1].find(';')
         element_length = element_name_length_str[1][:end_length]
 
         if placement:

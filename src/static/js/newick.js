@@ -16,15 +16,13 @@ function getNewick() {
     }).done(function( data ) {
         // var totalWidth = draw.attr('width');
         var totalWidth = 20*data['depth'];
-        //-10 because we want to write text
-        lengthHorizontalLine = ((0.95*totalWidth)/data['depth'])-10;
         // var totalHeight = draw.attr('height');
         var totalHeight = 10*(Math.pow(data['depth'],2));
         var maxWidthHeight = Math.max(totalWidth, totalHeight);
         var viewBoxStr =  '0 0 ' + maxWidthHeight.toString() + ' ' + maxWidthHeight.toString();
         draw.attr('viewBox', viewBoxStr);
         //we give depth specifically as a parameter as it only appears in the top level of data
-        recursiveDraw(draw, data, 0, totalHeight, lengthHorizontalLine, 0);
+        recursiveDraw(draw, data, 0, totalHeight, 10, 0);
     });
     var spaceSeperatedProteinName = String(proteinName).replace(/_/g, ' ');
     $('#title-protein').append(spaceSeperatedProteinName);
@@ -78,8 +76,16 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth)
 
     var beginLine = heightBegin+(sizeOneBox/2);
     var endLine = heightEnd-(sizeOneBox/2);
-    var xPointsVer = lengthHorLine*depth+10;
-    var connectionEndX = xPointsVer+lengthHorLine;
+    var floatNodeLength = parseFloat(node['length']);
+    if (Number.isNaN(floatNodeLength) || floatNodeLength < 0.00005){
+        floatNodeLength = 0.00001; //10 pixels bare minimum
+    }
+    if (floatNodeLength > 0.0001){
+        floatNodeLength = 0.0001; //not entirely accurate but otherwise it becomes unhandable
+    }
+    var xPointsVer = lengthHorLine;
+    lengthHorLine = lengthHorLine+floatNodeLength*10000000;
+    var connectionEndX = lengthHorLine;
 
 
     var line1 = draw.line(xPointsVer, beginLine, xPointsVer, endLine);
@@ -155,23 +161,15 @@ function moveDrag(e) {
 
     var new1X = current1X + pos1X;
     var new1Y =  current1Y + pos1Y;
-    var new2X = current2X + pos1X;
-    var new2Y = current2Y + pos1Y;
-    if (new1X < 10){
-        new1X = 10;
+    if (new1X < 0){
+        new1X = 0;
     }
-    if (new1Y < 10){
-        new1Y = 10;
-    }
-    if (new2X < 10) {
-        new2X = 10;
-    }
-    if (new2Y < 10) {
-        new2Y = 10;
+    if (new1Y < 0){
+        new1Y = 0;
     }
 
     var viewBoxStr = new1X.toString() + ' ' + new1Y.toString()+
-        ' ' + new2X.toString() + ' ' + new2Y.toString();
+        ' ' + current2X.toString() + ' ' + current2Y.toString();
     $(draw).attr('viewBox', viewBoxStr);
 
     pos2X = xInsideDiv;
