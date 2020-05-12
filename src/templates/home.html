@@ -132,6 +132,9 @@
                     </div>
                     <br>
                     <br>
+                    <div id="error-field" class="notification is-danger" style="display: none">
+
+                    </div>
                     <div class="field">
                         <p class="control">
                             <button id="submit-btn" class="button is-primary" type="submit">View</button>
@@ -218,9 +221,14 @@
             contentType: false,
             processData: false
         }).done(function (data) {
-            console.log(data);
+            document.getElementById("submit-btn").classList.remove("is-loading");
+            if(!data["success"]){
+                let error_div = document.getElementById("error-field");
+                error_div.innerHTML = data['error'];
+                error_div.style.display = '';
+                return;
+            }
             getNewick();
-            document.getElementById("submit-btn").classList.remove("is-loading")
         });
     });
 </script>

@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
+import traceback
+from datetime import datetime
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
 from tools import getDataLocation
-from src.phylo.placement import *
+from src.phylo.placement import makePlacement
+from src.phylo.fasta import parseFasta
 
 ALLOWED_EXTENSIONS = {'txt', 'fasta'}
 
@@ -15,16 +18,8 @@ app.config['EXPLANATION_FOLDER'] = os.path.join(THIS_FOLDER, 'static/protein_exp
 
 
 @app.route('/')
-def homepage(image_location=None):
-    if image_location:
-        return render_template('home.html', phylo_image=image_location)
-    else:
-        return render_template('home.html')
-
-
-@app.route("/data/")
-def viewData():
-    return render_template('results.html')
+def homepage():
+    return render_template('home.html')
 
 
 @app.route("/data/newick/<protein>")
@@ -70,19 +65,30 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def validSequence(sequence):
-    return True  # TODO
+def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
+    filename = f'addition{datetime.now().strftime("%m_%d_%Y_%H_%M_%S")}'
+    f = open(getDataLocation(f'tmp/') + filename, 'x')
+    f.write(f'{seq_id}|{proteinName}|{origin}\n{sequence}')
+    f.close()
+    return filename
 
 
 @app.route('/submit-data', methods=["POST"])
 def submit_data():
-    """Generate for a file."""
     data = request.form
-    if data['nuc-id']:
-        makePlacement(proteinName=data['proteinChoice'], sequence=data['nuc-sequence'], ID=data['nuc-id'])  # TODO nuc origin
-        return jsonify({'success': True, 'file': 0}), 200, {'ContentType': 'application/json'}
-    elif data['amino-id']:
-        makePlacement(proteinName=data['proteinChoice'], sequence=data['amino-sequence'], ID=data['amino-id'])  # TODO amino origin
+    if data['nuc-id'] or data['amino-id']:
+        if data['nuc-id']:
+            file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['nuc-origin'], sequence=data['nuc-sequence'],
+                                 seq_id=data['nuc-id'])
+        else:
+            file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['amino-origin'], sequence=data['amino-sequence'],
+                                 seq_id=data['amino-id'])
+        try:
+            makePlacement(getDataLocation(f'tmp/{file}'))
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
+        os.remove(getDataLocation(f'tmp/{file}'))
+        return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
     files = request.files
     if files['nuc-file'].filename:
@@ -91,14 +97,13 @@ def submit_data():
         f = files['amino-file']
     if f and allowed_file(f.filename):
         filename = secure_filename(f.filename)
-        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        print("File saved.")
-        # generateProteinPhylo('../data/filename', filename)
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # return_filename = os.path.join(app.config['IMAGE_FOLDER'], filename + '.png')
-        return_filename = '../static/spike-phylo.png'
-        return homepage(return_filename)
-    return jsonify({'success': False, 'file': 0}), 400, {'ContentType': 'application/json'}
+        f.save(getDataLocation(f'tmp/'), filename)
+        try:
+            makePlacement(getDataLocation(f'tmp/{filename}.fasta'))
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
+        os.remove(getDataLocation(f'tmp/{filename}.fasta'))
+    return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":
