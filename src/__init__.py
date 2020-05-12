@@ -60,14 +60,25 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/submit-data', methods=['GET', 'POST'])
+def validSequence(sequence):
+    return True  # TODO
+
+
+@app.route('/submit-data', methods=["POST"])
 def submit_data():
     """Generate for a file."""
-    data = request.form  # TODO files
-    makePlacement(proteinName=data['protein'], sequence=data['sequence'], ID=data['id'])
-    """f = request.files['file']
-    sequence = request.form['sequence-text']
-    filename = ""
+    data = request.form
+    if data['nuc-id']:
+        makePlacement(proteinName=data['proteinChoice'], sequence=data['nuc-sequence'], ID=data['nuc-id'])  # TODO nuc origin
+        return jsonify({'success': True, 'file': 0}), 200, {'ContentType': 'application/json'}
+    elif data['amino-id']:
+        makePlacement(proteinName=data['proteinChoice'], sequence=data['amino-sequence'], ID=data['amino-id'])  # TODO amino origin
+
+    files = request.files
+    if files['nuc-file'].filename:
+        f = files['nuc-file']
+    else:
+        f = files['amino-file']
     if f and allowed_file(f.filename):
         filename = secure_filename(f.filename)
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -77,10 +88,7 @@ def submit_data():
         # return_filename = os.path.join(app.config['IMAGE_FOLDER'], filename + '.png')
         return_filename = '../static/spike-phylo.png'
         return homepage(return_filename)
-    if sequence:
-        # generateProteinPhylo(sequence)
-        return redirect(url_for('homepage'))
-    return jsonify({'success': False, 'file': 0}), 400, {'ContentType': 'application/json'}"""
+    return jsonify({'success': False, 'file': 0}), 400, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":

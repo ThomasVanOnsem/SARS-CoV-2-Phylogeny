@@ -13,7 +13,7 @@
                 <form id="submit-form-data" onsubmit="updateDoc(event)">
                     <div class="container">
                         <div class="field select">
-                            <select id="proteinChoice">
+                            <select id="proteinChoice" name="proteinChoice">
                                 <!--<option value="chain_a">Chain A</option>
                                 <option value="chain_b">Chain B</option>
                                 <option value="chain_c">Chain C</option>-->
@@ -48,16 +48,16 @@
                             <br>
                             <div class="columns">
                                 <div class="column is-one-third">
-                                    <input id="nucleo-id" class="input" type="text" placeholder="Identifier e.g. NC_045512.2 (required)">
+                                    <input id="nucleo-id" class="input" type="text" placeholder="Identifier e.g. NC_045512.2 (required)" name="nuc-id">
                                 </div>
                                 <div class="column is-one-third">
-                                    <input id="nucleo-origin" class="input" type="text" placeholder="Origin of sample (not required)">
+                                    <input id="nucleo-origin" class="input" type="text" placeholder="Origin of sample (not required)" name="nuc-origin">
                                 </div>
                             </div>
                             <div class="field columns">
                                 <div class="column is-8 control is-medium">
                                     <label>
-                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="sequence-text" rows="3"></textarea>
+                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="nuc-sequence" rows="3"></textarea>
                                     </label>
                                 </div>
                                 <div class="column is-1" style="text-align: center;padding-top: 3rem;">
@@ -67,7 +67,7 @@
                                     <div id="upload-zone-nuc" class="">
                                         <div class="file has-name is-boxed is-medium">
                                             <label class="file-label">
-                                                <input class="file-input" type="file" name="file">
+                                                <input id="file-input-nuc" class="file-input" type="file" name="nuc-file">
                                                 <span class="file-cta">
                                                     <span class="file-icon"><i class="fas fa-upload"></i></span>
                                                     <span class="file-label">Choose a file…</span>
@@ -85,16 +85,16 @@
                             <br>
                             <div class="columns">
                                 <div class="column is-one-third">
-                                    <input id="amino-id" class="input" type="text" placeholder="Identifier e.g. YP_009742610 (required)">
+                                    <input id="amino-id" class="input" type="text" placeholder="Identifier e.g. YP_009742610 (required)" name="amino-id">
                                 </div>
                                 <div class="column is-one-third">
-                                    <input id="amino-origin" class="input" type="text" placeholder="Origin of sample (not required)">
+                                    <input id="amino-origin" class="input" type="text" placeholder="Origin of sample (not required)" name="amino-origin">
                                 </div>
                             </div>
                             <div class="field columns">
                                 <div class="column is-8 control is-medium">
                                     <label>
-                                        <textarea id="amino-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="sequence-text" rows="3"></textarea>
+                                        <textarea id="amino-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="amino-sequence" rows="3"></textarea>
                                     </label>
                                 </div>
                                 <div class="column is-1" style="text-align: center;padding-top: 3rem;">
@@ -104,7 +104,7 @@
                                     <div id="upload-zone-amino" class="">
                                         <div class="file has-name is-boxed is-medium">
                                             <label class="file-label">
-                                                <input class="file-input" type="file" name="file">
+                                                <input id="file-input-amino" class="file-input" type="file" name="amino-file">
                                                 <span class="file-cta">
                                                     <span class="file-icon"><i class="fas fa-upload"></i></span>
                                                     <span class="file-label">Choose a file…</span>
@@ -185,22 +185,56 @@
 
 {% block scripts %}
 <script>
+  const fileInput1 = document.querySelector('#upload-zone-nuc input[type=file]');
+  fileInput1.onchange = () => {
+      if (fileInput1.files.length > 0) {
+          const fileName1 = document.querySelector('#upload-zone-nuc .file-name');
+          fileName1.textContent = fileInput1.files[0].name;
+      }
+  }
+      const fileInput2 = document.querySelector('#upload-zone-amino input[type=file]');
+  fileInput2.onchange = () => {
+      if (fileInput2.files.length > 0) {
+          const fileName2 = document.querySelector('#upload-zone-amino .file-name');
+          fileName2.textContent = fileInput2.files[0].name;
+      }
+  }
+</script>
+<script>
+    $("form#submit-form-data").submit(function(e) {
+        let div = document.getElementById("add-data");
+        if(div.style.display !== ''){
+            return;
+        }
+        e.preventDefault();
+        document.getElementById("submit-btn").classList.add("is-loading")
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: '/submit-data',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        }).done(function (data) {
+            console.log(data);
+            getNewick();
+            document.getElementById("submit-btn").classList.remove("is-loading")
+        });
+    });
+</script>
+<script>
     function updateDoc (event) {
         event.preventDefault();
-        sendData();
+        let div = document.getElementById("add-data");
+        if(div.style.display === ''){
+            return;
+        }
         $('#selectedNodeContent').empty();
         getNewick();
     }
     initializeScaleNewick();
     initializeMoveNewick();
-</script>
-<script>
-    const fileInput = $('#upload-zone input[type=file]').eq(0);
-    fileInput.onchange = () => {
-        if (fileInput.files.length > 0) {
-          const fileName = $('#upload-zone .file-name').eq(0);
-          fileName.textContent = fileInput.files[0].name;
-        }
-    }
 </script>
 {% endblock %}
