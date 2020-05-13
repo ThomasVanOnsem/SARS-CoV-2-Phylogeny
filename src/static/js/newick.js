@@ -26,6 +26,14 @@ function getNewick() {
     });
     var spaceSeperatedProteinName = String(proteinName).replace(/_/g, ' ');
     $('#title-protein').append(spaceSeperatedProteinName);
+
+    $.ajax({
+        url: '/data/info/' + String(proteinName)
+    }).done(function (data){
+        $('#protein-explanation').empty();
+        let nameString = '<p><span class="has-text-primary">Name:</span> ' + data['explanation'].substring(0, 200) + '...' + '</p>';
+        $('#protein-explanation').append(nameString);
+    });
 }
 
 
