@@ -20,6 +20,7 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         tree_element["name"] = element_name
         tree_element["length"] = element_length
         tree_element["children"] = {}
+        tree_element["depth"] = 0
         tree["children"][element_name] = tree_element
     for child in structure["children"]:
         tree_element = {}
@@ -47,6 +48,7 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         tree_element, newDepth = construct_json(child, newick_string, tree_element, placement=placement)
         if depth < newDepth:
             depth = newDepth
+        tree_element["depth"] = depth
 
         tree["children"][element_name] = tree_element
 
