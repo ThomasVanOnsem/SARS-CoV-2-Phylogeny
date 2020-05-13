@@ -54,3 +54,12 @@
     padding-left: 0.2rem;
     color: lightgray;
 }
+
+.info-button{
+    background-color: white;
+    border-style: hidden;
+}
+
+.svg-inline--fa.fa-w-16{
+    width: auto;
+}

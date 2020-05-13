@@ -9,7 +9,7 @@
 <section class="section">
     <div class="columns">
         <div class="column is-half">
-            <span class="description">Choose a protein to view: <i class="far fa-question-circle info-icon"></i></span>
+            <span class="description">Choose a protein to view:</span>
                 <form id="submit-form-data" onsubmit="updateDoc(event)">
                     <div class="container">
                         <div class="field select">
@@ -120,12 +120,12 @@
                                 <input type="radio" name="gen-option" value="pplacer">
                                 <span>Pplacer</span>
                             </label>
-                            <i class="far fa-question-circle info-icon" style="margin-right: 0.5rem;"></i>
+                            <button id="pplacer-info" class="info-button" type="button"><i class="far fa-question-circle info-icon" style="margin-right: 0.5rem;"></i></button>
                             <label class="radio">
                                 <input type="radio" name="gen-option" value="fasttree">
                                 FastTree
                             </label>
-                            <i class="far fa-question-circle info-icon"></i>
+                            <button id="fasttree-info" class="info-button" type="button"><i class="far fa-question-circle info-icon"></i></button>
                         </div>
                     </div>
                     <br>
@@ -166,40 +166,51 @@
             </div>
 
             <div class="columns is-centered">
-                <div class="column is-6">
+                <div class="column is-11">
                     <div id="result-box" style="width:640px;height:480px;">
                         <div id="newick-view">
                             <div id="newick-graph"></div>
                         </div>
                     </div>
                 </div>
+                <div class="column is-1">
+                    <button id="newick-info" class="info-button" type="button"><i class="far fa-question-circle info-icon"></i></button>
+                </div>
             </div>
 
 
         </div>
     </div>
-
 </section>
-
 
 {% endblock %}
 
 {% block scripts %}
 <script>
-  const fileInput1 = document.querySelector('#upload-zone-nuc input[type=file]');
-  fileInput1.onchange = () => {
-      if (fileInput1.files.length > 0) {
-          const fileName1 = document.querySelector('#upload-zone-nuc .file-name');
-          fileName1.textContent = fileInput1.files[0].name;
-      }
-  }
-      const fileInput2 = document.querySelector('#upload-zone-amino input[type=file]');
-  fileInput2.onchange = () => {
-      if (fileInput2.files.length > 0) {
-          const fileName2 = document.querySelector('#upload-zone-amino .file-name');
-          fileName2.textContent = fileInput2.files[0].name;
-      }
-  }
+    tippy('#pplacer-info',{
+        content: 'Run a fast placement algorithm.'
+    });
+    tippy('#fasttree-info',{
+        content: 'Completely rebuild the phylo tree with FastTree.'
+    });
+    tippy('#newick-info',{
+        content: 'Interactive Newick representation of chosen protein.'
+    });
+
+    const fileInput1 = document.querySelector('#upload-zone-nuc input[type=file]');
+    fileInput1.onchange = () => {
+        if (fileInput1.files.length > 0) {
+            const fileName1 = document.querySelector('#upload-zone-nuc .file-name');
+            fileName1.textContent = fileInput1.files[0].name;
+        }
+    }
+    const fileInput2 = document.querySelector('#upload-zone-amino input[type=file]');
+    fileInput2.onchange = () => {
+        if (fileInput2.files.length > 0) {
+            const fileName2 = document.querySelector('#upload-zone-amino .file-name');
+            fileName2.textContent = fileInput2.files[0].name;
+        }
+    }
 </script>
 <script>
     $("form#submit-form-data").submit(function(e) {
