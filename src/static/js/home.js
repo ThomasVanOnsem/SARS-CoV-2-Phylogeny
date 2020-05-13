@@ -1,3 +1,7 @@
+$(window).ready(function(){
+    getNewick();
+});
+
 function addPlacementForm() {
     let div = document.getElementById("add-data");
     if(div.style.display === ''){

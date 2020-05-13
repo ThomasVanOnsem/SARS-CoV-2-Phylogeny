@@ -54,3 +54,9 @@
     padding-left: 0.2rem;
     color: lightgray;
 }
+
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}

@@ -67,7 +67,7 @@ def allowed_file(filename):
 
 def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
     filename = f'addition{datetime.now().strftime("%m_%d_%Y_%H_%M_%S")}'
-    f = open(getDataLocation(f'tmp/') + filename, 'x')
+    f = open(getDataLocation(f'tmp/') + filename, 'w+')
     f.write(f'{seq_id}|{proteinName}|{origin}\n{sequence}')
     f.close()
     return filename
@@ -86,6 +86,7 @@ def submit_data():
         try:
             makePlacement(getDataLocation(f'tmp/{file}'))
         except Exception as e:
+            os.remove(getDataLocation(f'tmp/{file}'))
             return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
         os.remove(getDataLocation(f'tmp/{file}'))
         return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
@@ -101,6 +102,7 @@ def submit_data():
         try:
             makePlacement(getDataLocation(f'tmp/{filename}.fasta'))
         except Exception as e:
+            os.remove(getDataLocation(f'tmp/{filename}.fasta'))
             return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
         os.remove(getDataLocation(f'tmp/{filename}.fasta'))
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
