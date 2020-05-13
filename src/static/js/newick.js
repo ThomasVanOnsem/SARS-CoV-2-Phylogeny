@@ -15,10 +15,14 @@ function getNewick() {
         url: callUrl,
     }).done(function( data ) {
         // var totalWidth = draw.attr('width');
-        var totalWidth = 20*data['depth'];
+        var totalWidth = 100*data['depth'];
         // var totalHeight = draw.attr('height');
-        var totalHeight = 10*(Math.pow(data['depth'],2));
+        var totalHeight = 100*(data['depth']);
         var maxWidthHeight = Math.max(totalWidth, totalHeight);
+        //this atleast make it viewable at a normal scale
+        if (maxWidthHeight > 10000){
+            maxWidthHeight = 10000;
+        }
         var viewBoxStr =  '0 0 ' + maxWidthHeight.toString() + ' ' + maxWidthHeight.toString();
         draw.attr('viewBox', viewBoxStr);
         //we give depth specifically as a parameter as it only appears in the top level of data
