@@ -66,7 +66,7 @@
 
 .info-container{
     width: 445px;
-    height: 150px;
+    max-height: 150px;
     overflow-y: scroll;
     overflow-x:hidden;
 }

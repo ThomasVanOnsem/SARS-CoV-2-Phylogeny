@@ -10,10 +10,10 @@
     <div class="columns">
         <div class="column is-half">
             <span class="description">Choose a protein to view:</span>
-                <form id="submit-form-data" onsubmit="updateDoc(event)">
+                <form id="submit-form-data">
                     <div class="container">
                         <div class="field select">
-                            <select id="proteinChoice" name="proteinChoice">
+                            <select id="proteinChoice" name="proteinChoice" onchange="updateDoc(event)">
                                 <!--<option value="chain_a">Chain A</option>
                                 <option value="chain_b">Chain B</option>
                                 <option value="chain_c">Chain C</option>-->
@@ -129,13 +129,12 @@
                         </div>
                     </div>
                     <br>
-                    <br>
                     <div id="error-field" class="notification is-danger" style="display: none">
 
                     </div>
                     <div class="field">
                         <p class="control">
-                            <button id="submit-btn" class="button is-primary" type="submit">View</button>
+                            <button id="submit-btn" class="button is-primary is-rounded" type="submit" disabled>Add Data</button>
                         </p>
                     </div>
                 </form>

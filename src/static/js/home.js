@@ -6,11 +6,11 @@ function addPlacementForm() {
     let div = document.getElementById("add-data");
     if(div.style.display === ''){
         div.style['display'] = 'none';
-        document.getElementById('submit-btn').innerText = 'View';
+        document.getElementById('submit-btn').disabled = true;
     }
     else{
         div.style.display = '';
-        document.getElementById('submit-btn').innerText = 'Add Data';
+        document.getElementById('submit-btn').disabled = false;
     }
 }
 
