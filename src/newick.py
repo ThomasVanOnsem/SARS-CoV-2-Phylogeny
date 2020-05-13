@@ -1,5 +1,5 @@
 def construct_json(structure, newick_string, tree=None, placement=False):
-    depth = 0
+    amount_leafs = 0
 
     if tree is None:
         tree = {"children": {}}
@@ -20,10 +20,10 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         tree_element["name"] = element_name
         tree_element["length"] = element_length
         tree_element["children"] = {}
-        tree_element["depth"] = 1
+        tree_element["leafCount"] = 1
         tree["children"][element_name] = tree_element
         #the leaf is a child of this node
-        depth += 1
+        amount_leafs += 1
     for child in structure["children"]:
         tree_element = {}
         element_specification = newick_string[child["end"]+1:]
@@ -47,13 +47,12 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         tree_element["length"] = element_length
         tree_element["children"] = {}
 
-        tree_element, newDepth = construct_json(child, newick_string, tree_element, placement=placement)
-        # if depth < newDepth:
-        depth += newDepth
-        tree_element["depth"] = newDepth
+        tree_element, new_amount_leafs = construct_json(child, newick_string, tree_element, placement=placement)
+        amount_leafs += new_amount_leafs
+        tree_element["leafCount"] = new_amount_leafs
 
         tree["children"][element_name] = tree_element
-    return tree, depth
+    return tree, amount_leafs
 
 #helperfunc to convert neweck to json (as this is more usefull for handling in jquery)
 def convert_newick_json(newick_file, placement=False):
@@ -87,7 +86,7 @@ def convert_newick_json(newick_file, placement=False):
         if current_node is None:
             return None
 
-        tree_json, depth = construct_json(current_node, newick_string, placement=placement)
+        tree_json, amount_leafs = construct_json(current_node, newick_string, placement=placement)
         #-2 because 1 for the top node and one because the root also adds one
-        tree_json['depth'] = depth
+        tree_json['leafCount'] = amount_leafs
         return tree_json

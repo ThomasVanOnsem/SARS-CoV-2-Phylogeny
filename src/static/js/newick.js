@@ -14,14 +14,13 @@ function getNewick() {
     $.ajax({
         url: callUrl,
     }).done(function( data ) {
-        var box = 24*data['depth'];
+        var box = 24*data['leafCount'];
         //this atleast make it viewable at a normal scale
         if (box > 10000){
             maxWidthHeight = 10000;
         }
         var viewBoxStr =  '0 0 ' + box.toString() + ' ' + box.toString();
         draw.attr('viewBox', viewBoxStr);
-        //we give depth 0 as we are at the root of the tree
         recursiveDraw(draw, data, 0, box, 10);
     });
     var spaceSeperatedProteinName = String(proteinName).replace(/_/g, ' ');
@@ -39,15 +38,14 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
     var branchBlocks = [0];
     var summationDepth = 0;
     for (var key in node['children']){
-        //the leafs are depth 0 but should still have space
-        summationDepth += (node['children'][key]['depth']+1);
+        summationDepth += (node['children'][key]['leafCount']);
     }
     if (summationDepth == 0){
         branchBlocks.push(heightEnd-heightBegin);
     }
     var percentFilled = 0;
     for (var key in node['children']){
-        var percent = (node['children'][key]['depth']+1)/summationDepth;
+        var percent = (node['children'][key]['leafCount'])/summationDepth;
         var sizeThisBox = (heightEnd-heightBegin)*(percentFilled+percent);
         percentFilled += percent;
         branchBlocks.push(sizeThisBox);
