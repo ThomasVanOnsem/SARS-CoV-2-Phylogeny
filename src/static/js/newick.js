@@ -14,19 +14,15 @@ function getNewick() {
     $.ajax({
         url: callUrl,
     }).done(function( data ) {
-        // var totalWidth = draw.attr('width');
-        var totalWidth = 100*data['depth'];
-        // var totalHeight = draw.attr('height');
-        var totalHeight = 100*(data['depth']);
-        var maxWidthHeight = Math.max(totalWidth, totalHeight);
+        var box = 24*data['depth'];
         //this atleast make it viewable at a normal scale
-        if (maxWidthHeight > 10000){
+        if (box > 10000){
             maxWidthHeight = 10000;
         }
-        var viewBoxStr =  '0 0 ' + maxWidthHeight.toString() + ' ' + maxWidthHeight.toString();
+        var viewBoxStr =  '0 0 ' + box.toString() + ' ' + box.toString();
         draw.attr('viewBox', viewBoxStr);
-        //we give depth specifically as a parameter as it only appears in the top level of data
-        recursiveDraw(draw, data, 0, totalHeight, 10, 0);
+        //we give depth 0 as we are at the root of the tree
+        recursiveDraw(draw, data, 0, box, 10);
     });
     var spaceSeperatedProteinName = String(proteinName).replace(/_/g, ' ');
     $('#title-protein').append(spaceSeperatedProteinName);
@@ -40,7 +36,7 @@ function getNewick() {
     });
 }
 
-function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth) {
+function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
     var branchBlocks = [0];
     var summationDepth = 0;
     for (var key in node['children']){
@@ -66,7 +62,7 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth)
         floatNodeLength = 0.0001; //not entirely accurate but otherwise it becomes unhandable
     }
     var xPointsVer = lengthHorLine;
-    lengthHorLine = lengthHorLine+floatNodeLength*10000000;
+    lengthHorLine = lengthHorLine+floatNodeLength*5000000;
     var connectionEndX = lengthHorLine;
 
     var beginLine = heightBegin+(branchBlocks[1]/2);
@@ -92,7 +88,7 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine, depth)
         line3.stroke({width: 2, color: '#000000'});
         var beginNextHeight = heightBegin+(branchBlocks[iter]);
         var endNextHeight = heightBegin+branchBlocks[iter+1];
-        recursiveDraw(draw, node['children'][key], beginNextHeight, endNextHeight, lengthHorLine, depth+1);
+        recursiveDraw(draw, node['children'][key], beginNextHeight, endNextHeight, lengthHorLine);
         iter++;
     }
 }
@@ -178,8 +174,8 @@ function moveDrag(e) {
     var current2X = parseInt(viewList[2]);
     var current2Y = parseInt(viewList[3]);
 
-    var new1X = current1X + pos1X;
-    var new1Y =  current1Y + pos1Y;
+    var new1X = current1X + 3*pos1X;
+    var new1Y =  current1Y + 3*pos1Y;
     if (new1X < 0){
         new1X = 0;
     }

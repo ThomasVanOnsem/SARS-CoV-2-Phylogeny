@@ -20,8 +20,10 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         tree_element["name"] = element_name
         tree_element["length"] = element_length
         tree_element["children"] = {}
-        tree_element["depth"] = 0
+        tree_element["depth"] = 1
         tree["children"][element_name] = tree_element
+        #the leaf is a child of this node
+        depth += 1
     for child in structure["children"]:
         tree_element = {}
         element_specification = newick_string[child["end"]+1:]
@@ -46,13 +48,12 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         tree_element["children"] = {}
 
         tree_element, newDepth = construct_json(child, newick_string, tree_element, placement=placement)
-        if depth < newDepth:
-            depth = newDepth
-        tree_element["depth"] = depth
+        # if depth < newDepth:
+        depth += newDepth
+        tree_element["depth"] = newDepth
 
         tree["children"][element_name] = tree_element
-
-    return tree, depth+1
+    return tree, depth
 
 #helperfunc to convert neweck to json (as this is more usefull for handling in jquery)
 def convert_newick_json(newick_file, placement=False):
