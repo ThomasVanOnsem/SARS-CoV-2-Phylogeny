@@ -63,3 +63,10 @@
 .svg-inline--fa.fa-w-16{
     width: auto;
 }
+
+.info-container{
+    width: 445px;
+    height: 150px;
+    overflow-y: scroll;
+    overflow-x:hidden;
+}
