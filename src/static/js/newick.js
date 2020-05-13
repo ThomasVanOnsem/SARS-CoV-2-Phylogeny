@@ -31,8 +31,7 @@ function getNewick() {
         url: '/data/info/' + String(proteinName)
     }).done(function (data){
         $('#protein-explanation').empty();
-        let nameString = '<p><span class="has-text-primary">Name:</span> ' + data['explanation'].substring(0, 200) + '...' + '</p>';
-        $('#protein-explanation').append(nameString);
+        $('#protein-explanation').append(data['explanation']);
     });
 }
 
