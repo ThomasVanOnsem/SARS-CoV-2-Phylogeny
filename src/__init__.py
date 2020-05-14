@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
-import traceback
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
@@ -82,7 +81,7 @@ def submit_data():
             os.remove(getDataLocation(f'tmp/{file}'))
             return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
         os.remove(getDataLocation(f'tmp/{file}'))
-        return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
+        return jsonify({'success': True, 'newick': jsonify(newickJson)}), 200, {'ContentType': 'application/json'}
 
     # Handle data from file upload
     files = request.files
@@ -100,7 +99,7 @@ def submit_data():
             os.remove(getDataLocation(f'tmp/{filename}.fasta'))
             return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
         os.remove(getDataLocation(f'tmp/{filename}.fasta'))
-        return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
+        return jsonify({'success': True, 'newick': jsonify(newickJson)}), 200, {'ContentType': 'application/json'}
     return jsonify({'success': False, 'error': "File is not a fasta file or no data is specified!"}), 200, {'ContentType': 'application/json'}
 
 
