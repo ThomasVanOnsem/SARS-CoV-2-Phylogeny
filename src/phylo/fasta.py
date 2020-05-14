@@ -1,6 +1,30 @@
 from Bio import SeqIO
-from phylo.model import Samples, Protein
+from src.phylo.model import Samples, Protein
+import json
 
+def collectLocations(source, target):
+    print('collecting locations')
+    locations = dict()
+    with open(source) as file:
+        line = file.readline()
+        while line:
+            if line[0] == '>':
+                pieces = line.split('|')
+                for iter in range(0, len(pieces)):
+                    pieces[iter] = pieces[iter].strip()
+                names = pieces[1].split('[')
+                name = names[0].strip().lower().replace(' ', '_')
+                if name in locations:
+                    variant = pieces[0][1:] #it ends on a space
+                    location = (pieces[-1])
+                    locations[name][variant] = location
+                else:
+                    locations[name] = dict()
+
+            line = file.readline()
+    res = open(target, 'w+')
+    res.write(json.dumps(locations))
+    res.close()
 
 def parseFasta(name, nucleotides=False):
     """

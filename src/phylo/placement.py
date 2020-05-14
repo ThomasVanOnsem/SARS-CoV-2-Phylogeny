@@ -1,9 +1,9 @@
 import json
 import os
 from subprocess import check_call
-from newick import convert_newick_json
-from phylo.align import alignOne
-from tools import getDataLocation, makeTempDirectory
+from src.newick import convert_newick_json
+from src.phylo.align import alignOne
+from src.tools import getDataLocation, makeTempDirectory
 
 
 def makeReferencePackage(treeFile, alignmentFile, logFile, output):

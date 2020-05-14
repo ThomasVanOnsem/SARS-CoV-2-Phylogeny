@@ -1,11 +1,10 @@
-from phylo.align import align, alignOne
-from phylo.model import Samples
+from src.phylo.align import align, alignOne
+from src.phylo.model import Samples
 from Bio.Phylo.Applications import FastTreeCommandline
 from Bio import SeqIO
-
-from newick import convert_newick_json
-from tools import getDataLocation
-from phylo.placement import makeReferencePackage
+from src.newick import convert_newick_json
+from src.tools import getDataLocation
+from src.phylo.placement import makeReferencePackage
 
 
 def constructTree(alignmentFile, treeFile, logFile, nucleotide=False):
@@ -88,7 +87,6 @@ def processNucleotideSamples(samples: Samples):
     filename = 'genomes'
     sequences = samples.getGenomeSequences()
     constructTreeFromSequences(sequences, filename, nucleotide=True)
-
 
 def constructTreeFromSequences(sequences, filename, nucleotide=False):
     sequencesFile = getDataLocation(f'sequences/{filename}.fasta')
