@@ -49,6 +49,11 @@ function setupFormSubmission() {
         e.preventDefault();
         document.getElementById("submit-btn").classList.add("is-loading")
         let formData = new FormData(this);
+        if ($("#choose-pplacer").hasClass("is-selected")) {
+            formData.append("algorithm", "pplacer");
+        } else {
+            formData.append("algorithm", "fasttree");
+        }
 
         $.ajax({
             url: '/submit-data',

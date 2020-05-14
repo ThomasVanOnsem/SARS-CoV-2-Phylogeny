@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
+from phylo.phylo import constructTree, constructNewTree
 from tools import getDataLocation, makeTempDirectory
 from src.phylo.placement import makePlacement, placementToJsonVisualisation
 
@@ -60,7 +61,7 @@ def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
     # add permission so muscle can read
     os.umask(0)
     with open(os.open(filename, os.O_CREAT | os.O_WRONLY, 0o777), 'w') as fh:
-        fh.write(f'> {seq_id}|{proteinName}|{origin}\n{sequence}')
+        fh.write(f'>{seq_id} |{proteinName}|{origin}\n{sequence}')
     return filename
 
 
@@ -72,7 +73,7 @@ def submit_data():
     # Make a fasta file if a sequence is given
     if data['id']:
         ID = data['id']
-        filename = makeFastaFile(proteinName=data['proteinChoice'], origin=data['origin'], sequence=data['sequence'],
+        filename = makeFastaFile(proteinName=proteinName, origin=data.get('origin', 'unknown'), sequence=data['sequence'],
                                  seq_id=data['id'])
     # Save file when uploaded
     else:
@@ -87,8 +88,11 @@ def submit_data():
                 'ContentType': 'application/json'}
 
     try:
-        placementJson = makePlacement(filename, proteinName, ID)
-        newickJson = placementToJsonVisualisation(placementJson, ID)
+        if data['algorithm'] == 'pplacer':
+            placementJson = makePlacement(filename, proteinName, ID)
+            newickJson = placementToJsonVisualisation(placementJson, ID)
+        else:
+            newickJson = constructNewTree(filename, proteinName, False)
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
     finally:

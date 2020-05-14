@@ -82,6 +82,9 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
         if (node['placement']) {
             endDot.attr('fill', 'red')
         }
+        if (node['added']) {
+            endDot.attr('fill', 'green')
+        }
     }
 
     var iter = 0;
@@ -100,7 +103,6 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
 function startHoveringNode(node){
     if (!$(node).hasClass('data-selected')){
         $(node).attr({
-            fill: '#00D1B2',
             r: '7.5'
         });
     }
@@ -109,7 +111,6 @@ function startHoveringNode(node){
 function stopHoveringNode(node){
     if (!$(node).hasClass('data-selected')){
         $(node).attr({
-            fill: '#000000',
             r: '5'
         });
     }

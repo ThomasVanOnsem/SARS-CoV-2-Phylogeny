@@ -1,7 +1,9 @@
-from phylo.align import align
+from phylo.align import align, alignOne
 from phylo.model import Samples
 from Bio.Phylo.Applications import FastTreeCommandline
 from Bio import SeqIO
+
+from newick import convert_newick_json
 from tools import getDataLocation
 from phylo.placement import makeReferencePackage
 
@@ -15,6 +17,58 @@ def constructTree(alignmentFile, treeFile, logFile, nucleotide=False):
     else:
         fastTreeCline = FastTreeCommandline(input=alignmentFile, log=logFile, out=treeFile)
     fastTreeCline()
+
+
+def constructNewTree(newSequencesFile, proteinName, nucleotide=False):
+    filename = proteinName.replace(' ', '_')
+
+    existingIDs = getIDsFromFastaFile(getDataLocation(f'alignments/{filename}.fasta'))
+    newIDs = getIDsFromFastaFile(newSequencesFile)
+
+    for ID in newIDs:
+        if ID in existingIDs:
+            raise Exception(f"ID {ID} already exists, please pick another one")
+
+    alignmentFile = getDataLocation(f'alignments/{filename}.fasta')
+
+    # Add sequence to current alignment
+    alignOne(newSequencesFile, alignmentFile, alignmentFile)
+
+    # Construct tree again
+    treeFile = getDataLocation(f'phylo/{filename}.newick')
+    logFile = getDataLocation(f'phylo/{filename}.log')
+    constructTree(alignmentFile, treeFile, logFile, nucleotide)
+
+    # Make reference package for pplacer
+    packageFile = getDataLocation(f'reference_packages/{filename}.refpkg')
+    makeReferencePackage(treeFile, alignmentFile, logFile, packageFile)
+
+    newickFile = getDataLocation(f'phylo/{filename}.newick')
+    newickJson = convert_newick_json(newickFile)
+    markAdditions(newickJson, newIDs)
+    return newickJson
+
+
+def getIDsFromFastaFile(filename):
+    sequences = SeqIO.parse(filename, 'fasta')
+    IDs = set()
+    for seq in sequences:
+        ID = str(seq.id)
+        if '|' in ID:
+            ID = ID[: ID.find('|')]
+        IDs.add(ID)
+    return IDs
+
+
+def markAdditions(tree: dict, newIDs):
+    """ Traverse tree and add placements """
+    for key in tree['children']:
+        elem = tree['children'][key]
+        if key in newIDs:
+            elem['added'] = True
+
+        # Recursive call
+        markAdditions(elem, newIDs)
 
 
 def processProteinSamples(samples: Samples):
