@@ -69,23 +69,21 @@ def submit_data():
     # Handle data from input fields
     data = request.form
     proteinName = data['proteinChoice']
-    ID = data['nuc-id']
+    ID = data['id']
     if data['nuc-id'] or data['amino-id']:
-        if data['nuc-id']:
-            file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['nuc-origin'], sequence=data['nuc-sequence'],
-                                 seq_id=data['nuc-id'])
-        else:
-            file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['amino-origin'], sequence=data['amino-sequence'],
-                                 seq_id=data['amino-id'])
-        try:
+        file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['origin'], sequence=data['sequence'],
+                             seq_id=data['nuc-id'])
+    else:
+        pass
 
-            placementJson = makePlacement(file, proteinName, ID)
-            newickJson = placementToJsonVisualisation(placementJson, ID)
-        except Exception as e:
-            return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
-        finally:
-            os.remove(file)
-        return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
+    try:
+        placementJson = makePlacement(file, proteinName, ID)
+        newickJson = placementToJsonVisualisation(placementJson, ID)
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
+    finally:
+        os.remove(file)
+    return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
 
     # Handle data from file upload
     files = request.files

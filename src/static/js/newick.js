@@ -1,5 +1,4 @@
-
-function getNewick() {
+function fetchTree() {
     $('#newick-graph').empty();
     $('#title-protein').empty();
 
