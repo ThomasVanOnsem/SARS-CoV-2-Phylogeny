@@ -1,12 +1,9 @@
 import json
 import os
 from subprocess import check_call
-from os import path
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
+from newick import convert_newick_json
 from phylo.align import alignOne
-from src import getDataLocation
+from tools import getDataLocation, makeTempDirectory
 
 
 def makeReferencePackage(treeFile, alignmentFile, logFile, output):
@@ -21,32 +18,18 @@ def makeReferencePackage(treeFile, alignmentFile, logFile, output):
     check_call(cmd.split())
 
 
-def makeTempDirectory():
-    tmpDirectory = getDataLocation('tmp')
-    check_call(['mkdir', '-p', tmpDirectory])
-
-
-def makePlacement(proteinName: str, sequence: str, ID: str):
-    sequence = SeqRecord(seq=Seq(sequence.replace('\n', '')), id=ID, description='')
-
+def makePlacement(fastaFile: str, proteinName: str, ID: str):
     proteinName = proteinName.replace(' ', '_')
     makeTempDirectory()
 
-    # Use the hash of the sequence so multiple users can make placements at the same time
-    sequenceHash = str(sequence).__hash__()
-
-    # Write the input sequence in a tmp file
-    inputSequenceFile = getDataLocation(f'tmp/{sequenceHash}.fasta')
-    SeqIO.write(sequence, inputSequenceFile, 'fasta')
-
     # Align the sequence against the reference alignment
     referenceAlignmentFile = getDataLocation(f'alignments/{proteinName}.fasta')
-    mergedAlignmentFile = getDataLocation(f'tmp/merged_{sequenceHash}.fasta')
-    alignOne(inputSequenceFile, referenceAlignmentFile, mergedAlignmentFile)
+    mergedAlignmentFile = getDataLocation(f'tmp/merged_{ID}.fasta')
+    alignOne(fastaFile, referenceAlignmentFile, mergedAlignmentFile)
 
     # Make placement using pplacer
     packageFile = getDataLocation(f'reference_packages/{proteinName}.refpkg')
-    placementFile = getDataLocation(f'tmp/placement_{sequenceHash}.jplace')
+    placementFile = getDataLocation(f'tmp/{ID.__hash__()}.jplace')
     # To prevent crash in pplacer
     os.environ['LANG'] = '/usr/lib/locale/en_US'
     cmd = f'../lib/pplacer -o {placementFile} -c {packageFile} {mergedAlignmentFile}'
@@ -56,14 +39,13 @@ def makePlacement(proteinName: str, sequence: str, ID: str):
         placement = json.load(file)
 
     # Remove temp files
-    os.remove(inputSequenceFile)
     os.remove(mergedAlignmentFile)
     os.remove(placementFile)
 
     return placement
 
 
-def placementToJsonVisualisation(placementJson):
+def placementToJsonVisualisation(placementJson, ID: str):
     indices = {
         'like_weight_ratio': None,
         'edge_num': None,
@@ -74,22 +56,40 @@ def placementToJsonVisualisation(placementJson):
     for index, field in enumerate(placementJson['fields']):
         indices[field] = index
 
-    placements = []
+    placements = dict()
     for placement in placementJson['placements']:
         for p in placement['p']:
-            placements.append({
-                'edge': p[indices['edge_num']],
+            edge = str(p[indices['edge_num']])
+            placements[edge] = {
                 'likelihood_percentage': p[indices['like_weight_ratio']],
                 'distal_length': p[indices['distal_length']],
                 'pendant_length': p[indices['pendant_length']]
-            })
+            }
 
-    from newick import convert_newick_json
-    with open('../data/example.jplace', 'w') as file:
+    placementTree = getDataLocation(f'tmp/{ID.__hash__()}.newick')
+    with open(placementTree, 'w') as file:
+        json.dump(placementJson['tree'], file)
+
+    newick_json = convert_newick_json(placementTree, placement=True)
+
+    addPlacements(newick_json, placements)
+
+    # TODO remove
+    with open('plac.jplace', 'w') as file:
         json.dump(placementJson, file)
-
-    newick_json = convert_newick_json('../data/example.jplace', placement=True)
-
-    # TODO add placement to newick_json
+    with open('newick.json', 'w') as file:
+        json.dump(newick_json, file)
 
     return newick_json
+
+
+def addPlacements(tree: dict, placements: dict):
+    """ Traverse tree and add placements """
+    for key in tree['children']:
+        elem = tree['children'][key]
+        if elem['index'] in placements:
+            elem['placement'] = True
+            elem['likelihood'] = placements[elem['index']]['likelihood_percentage']
+
+        # Recursive call
+        addPlacements(elem, placements)

@@ -36,12 +36,10 @@ def construct_json(structure, newick_string, tree=None, placement=False):
         element_length = element_name_length_str[1][:end_length]
 
         if placement:
-            # TODO element length is incorrect so following code will make it crash
-            pass
-            # element_length, node_index = element_length.split('{')
-            # # Remove last curly bracket from index
-            # node_index = node_index[:-1]
-            # tree_element["index"] = node_index
+            element_length, node_index = element_length.split('{')
+            # Remove last curly bracket from index
+            node_index = node_index[:-1]
+            tree_element["index"] = node_index
 
         #for inner nodes we don't insert names
         tree_element["length"] = element_length

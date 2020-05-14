@@ -19,6 +19,7 @@ function setUpNewick(data) {
     var width = $('#result-box').width();
     var proteinName = $('select#proteinChoice option:checked').val();
 
+    $("#newick-graph").empty();
     var draw = SVG().addTo('#newick-graph').size(width.toString(), height.toString());
 
     var box = 24*data['leafCount'];
@@ -79,6 +80,9 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
         endDot.attr('onmouseover', 'startHoveringNode(this)')
         endDot.attr('onmouseout', 'stopHoveringNode(this)')
         endDot.attr('onclick', 'showInfoVariant(this)')
+        if (node['placement']) {
+            endDot.attr('fill', 'red')
+        }
     }
 
     var iter = 0;
