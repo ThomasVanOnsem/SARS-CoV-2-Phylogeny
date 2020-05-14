@@ -9,14 +9,11 @@
 <section class="section">
     <div class="columns">
         <div class="column is-half">
-            <span class="description">Choose a protein to view:</span>
+                <span class="description">Choose a protein to view</span>
                 <form id="submit-form-data">
                     <div class="container">
                         <div class="field select">
-                            <select id="proteinChoice" name="proteinChoice" onchange="updateDoc(event)">
-                                <!--<option value="chain_a">Chain A</option>
-                                <option value="chain_b">Chain B</option>
-                                <option value="chain_c">Chain C</option>-->
+                            <select id="proteinChoice" name="proteinChoice" onchange="onProteinChange(event)">
                                 <option value="envelope_protein">Envelope Protein</option>
                                 <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
                                 <option value="nucleocapsid_phosphoprotein">Nucleocapsid Phosphoprotein</option>
@@ -33,40 +30,36 @@
                         </div>
                     </div>
 
-                    <button class="button is-white" onclick="addPlacementForm()" style="margin-top: 0.8rem;margin-bottom: 0.8rem;" type="button">
-                        <span><i class="fas fa-plus" style="margin-right: 0.6rem;"></i>Add data</span>
+                    <button class="button is-white" onclick="toggleSubmissionForm()" style="margin-top: 0.8rem;" type="button">
+                        <span><i class="fas fa-plus" style="margin-right: 0.6rem;"></i>Add data to tree</span>
                     </button>
                     <div id="add-data" class="" style="display: none;">
-
-                        <div id="type-sequence-input" class="buttons has-addons">
-                            <button id="choose-nuc" class="button toggle-button is-primary is-selected" onclick="triggerToggleAdd(event)">Nucleotides</button>
-                            <button id="choose-ac" class="button toggle-button" onclick="triggerToggleAdd(event)">Amino Acids</button>
-                        </div>
-
-                        <div id="nucleotide-adding">
-                            <p class="description">Add a new variant of the SARS-CoV2 DNA sequence to the tree:</p>
+                        <hr>
+                        <div>
+                            <p class="description">Add your own sequence to the tree:</p>
                             <br>
                             <div class="columns">
                                 <div class="column is-one-third">
-                                    <input id="nucleo-id" class="input" type="text" placeholder="Identifier e.g. NC_045512.2 (required)" name="nuc-id">
+                                    <input id="nucleo-id" class="input" type="text" placeholder="Identifier e.g. NC_045512 (required)" name="id">
                                 </div>
                                 <div class="column is-one-third">
-                                    <input id="nucleo-origin" class="input" type="text" placeholder="Origin of sample (not required)" name="nuc-origin">
+                                    <input id="nucleo-origin" class="input" type="text" placeholder="Origin of sample (not required)" name="origin">
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="control is-medium">
                                     <label>
-                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="nuc-sequence" rows="3"></textarea>
+                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="sequence" rows="3"></textarea>
                                     </label>
                                 </div>
                             </div>
+                            <p class="description">Or upload a fasta file:</p>
                             <br>
                             <div class="is-desktop">
-                                <div id="upload-zone-nuc" class="">
+                                <div id="upload-zone" class="">
                                     <div class="file has-name">
                                         <label class="file-label">
-                                            <input id="file-input-nuc" class="file-input" type="file" name="nuc-file">
+                                            <input id="file-input-nuc" class="file-input" type="file" name="file">
                                             <span class="file-cta">
                                                 <span class="file-icon"><i class="fas fa-upload"></i></span>
                                                 <span class="file-label">Choose a file…</span>
@@ -77,55 +70,12 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div id="amino-acid-adding" style="display:none;">
-                            <p class="description">Add a new amino acid sequence of SARS-CoV2 to the tree:</p>
-                            <br>
-                            <div class="columns">
-                                <div class="column is-one-third">
-                                    <input id="amino-id" class="input" type="text" placeholder="Identifier e.g. YP_009742610 (required)" name="amino-id">
-                                </div>
-                                <div class="column is-one-third">
-                                    <input id="amino-origin" class="input" type="text" placeholder="Origin of sample (not required)" name="amino-origin">
-                                </div>
-                            </div>
-                            <div class="field columns">
-                                <div class="column is-8 control is-medium">
-                                    <label>
-                                        <textarea id="amino-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="amino-sequence" rows="3"></textarea>
-                                    </label>
-                                </div>
-                                <div class="column is-1" style="text-align: center;padding-top: 3rem;">
-                                    <span>-Or-</span>
-                                </div>
-                                <div class="column is-3 is-desktop">
-                                    <div id="upload-zone-amino" class="">
-                                        <div class="file has-name is-boxed is-medium">
-                                            <label class="file-label">
-                                                <input id="file-input-amino" class="file-input" type="file" name="amino-file">
-                                                <span class="file-cta">
-                                                    <span class="file-icon"><i class="fas fa-upload"></i></span>
-                                                    <span class="file-label">Choose a file…</span>
-                                                </span>
-                                                <span class="file-name"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
+                        <hr>
                         <div class="control">
-                            <label class="radio">
-                                <input type="radio" name="gen-option" value="pplacer">
-                                <span>Pplacer</span>
-                            </label>
-                            <button id="pplacer-info" class="info-button" type="button"><i class="far fa-question-circle info-icon" style="margin-right: 0.5rem;"></i></button>
-                            <label class="radio">
-                                <input type="radio" name="gen-option" value="fasttree">
-                                FastTree
-                            </label>
-                            <button id="fasttree-info" class="info-button" type="button"><i class="far fa-question-circle info-icon"></i></button>
+                            <div id="algorithm-input" class="buttons has-addons">
+                                <button id="choose-pplacer" class="button toggle-button is-primary is-selected" onclick="triggerToggleAlgorithmType(event)">Fast placement (using Pplacer) <i id="pplacer-info" class="far fa-question-circle info-icon" style="margin-left: 0.5rem;"></i></button>
+                                <button id="choose-fasttree" class="button toggle-button" onclick="triggerToggleAlgorithmType(event)">Rebuild Tree (using FastTree) <i id="fasttree-info" class="far fa-question-circle info-icon" style="margin-left: 0.5rem;"></i></button>
+                            </div>
                         </div>
                         <br>
                         <div id="error-field" class="notification is-danger" style="display: none">
@@ -133,7 +83,7 @@
                         </div>
                         <div class="field">
                             <p class="control">
-                                <button id="submit-btn" class="button is-primary is-rounded" type="submit" disabled>Add Data</button>
+                                <button id="submit-btn" class="button is-primary is-rounded" type="submit" disabled>Process</button>
                             </p>
                         </div>
                     </div>
@@ -153,12 +103,12 @@
                     </div>
                 </div>
                 <div class="column is-half">
-                    <div class="card">
+                    <div class="card" style="width: 100%">
                         <header class="card-header has-background-primary">
                             <p class="card-header-title">Short Description Protein</p>
                         </header>
-                        <div class="card-content info-container">
-                            <div class="content"><p id="protein-explanation"></p></div>
+                        <div class="card-content info-container" style="width: 100%">
+                            <div class="content"><p style="width: 100%" id="protein-explanation"></p></div>
                         </div>
                     </div>
                 </div>
@@ -185,73 +135,4 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    tippy('#pplacer-info',{
-        content: 'Run a fast placement algorithm.'
-    });
-    tippy('#fasttree-info',{
-        content: 'Completely rebuild the phylo tree with FastTree.'
-    });
-    tippy('#newick-info',{
-        content: 'Interactive Newick representation of chosen protein.'
-    });
-
-    const fileInput1 = document.querySelector('#upload-zone-nuc input[type=file]');
-    fileInput1.onchange = () => {
-        if (fileInput1.files.length > 0) {
-            const fileName1 = document.querySelector('#upload-zone-nuc .file-name');
-            fileName1.textContent = fileInput1.files[0].name;
-        }
-    }
-    const fileInput2 = document.querySelector('#upload-zone-amino input[type=file]');
-    fileInput2.onchange = () => {
-        if (fileInput2.files.length > 0) {
-            const fileName2 = document.querySelector('#upload-zone-amino .file-name');
-            fileName2.textContent = fileInput2.files[0].name;
-        }
-    }
-</script>
-<script>
-    $("form#submit-form-data").submit(function(e) {
-        let div = document.getElementById("add-data");
-        if(div.style.display !== ''){
-            return;
-        }
-        e.preventDefault();
-        document.getElementById("submit-btn").classList.add("is-loading")
-        let formData = new FormData(this);
-
-        $.ajax({
-            url: '/submit-data',
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        }).done(function (data) {
-            document.getElementById("submit-btn").classList.remove("is-loading");
-            if(!data["success"]){
-                let error_div = document.getElementById("error-field");
-                error_div.innerHTML = data['error'];
-                error_div.style.display = '';
-                return;
-            }
-            let newickJson = data['newick'];
-            setUpNewick(newickJson);
-        });
-    });
-</script>
-<script>
-    function updateDoc (event) {
-        event.preventDefault();
-        let div = document.getElementById("add-data");
-        if(div.style.display === ''){
-            return;
-        }
-        $('#selectedNodeContent').empty();
-        getNewick();
-    }
-    initializeScaleNewick();
-    initializeMoveNewick();
-</script>
 {% endblock %}

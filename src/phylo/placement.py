@@ -71,15 +71,7 @@ def placementToJsonVisualisation(placementJson, ID: str):
         json.dump(placementJson['tree'], file)
 
     newick_json = convert_newick_json(placementTree, placement=True)
-
     addPlacements(newick_json, placements)
-
-    # TODO remove
-    with open('plac.jplace', 'w') as file:
-        json.dump(placementJson, file)
-    with open('newick.json', 'w') as file:
-        json.dump(newick_json, file)
-
     return newick_json
 
 

@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from src.newick import convert_newick_json
+from src.phylo.phylo import constructTree, constructNewTree
 from src.tools import getDataLocation, makeTempDirectory
 from src.phylo.placement import makePlacement, placementToJsonVisualisation
 
@@ -60,52 +61,43 @@ def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
     # add permission so muscle can read
     os.umask(0)
     with open(os.open(filename, os.O_CREAT | os.O_WRONLY, 0o777), 'w') as fh:
-        fh.write(f'> {seq_id}|{proteinName}|{origin}\n{sequence}')
+        fh.write(f'>{seq_id} |{proteinName}|{origin}\n{sequence}')
     return filename
 
 
 @app.route('/submit-data', methods=["POST"])
 def submit_data():
-    # Handle data from input fields
     data = request.form
     proteinName = data['proteinChoice']
-    ID = data['nuc-id']
-    if data['nuc-id'] or data['amino-id']:
-        if data['nuc-id']:
-            file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['nuc-origin'], sequence=data['nuc-sequence'],
-                                 seq_id=data['nuc-id'])
-        else:
-            file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['amino-origin'], sequence=data['amino-sequence'],
-                                 seq_id=data['amino-id'])
-        try:
 
-            placementJson = makePlacement(file, proteinName, ID)
-            newickJson = placementToJsonVisualisation(placementJson, ID)
-        except Exception as e:
-            return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
-        finally:
-            os.remove(file)
-        return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
-
-    # Handle data from file upload
-    files = request.files
-    if files['nuc-file'].filename:
-        f = files['nuc-file']
+    # Make a fasta file if a sequence is given
+    if data['id']:
+        ID = data['id']
+        filename = makeFastaFile(proteinName=proteinName, origin=data.get('origin', 'unknown'), sequence=data['sequence'],
+                                 seq_id=data['id'])
+    # Save file when uploaded
     else:
-        f = files['amino-file']
-    if f and allowed_file(f.filename):
-        filename = secure_filename(f.filename)
-        filename = getDataLocation(f'tmp/{filename}')
-        f.save(filename)
-        try:
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            filename = getDataLocation(f'tmp/{filename}')
+            f.save(filename)
+            ID = filename.__hash__()
+        else:
+            return jsonify({'success': False, 'error': "File is not a fasta file or no data is specified!"}), 200, {
+                'ContentType': 'application/json'}
+
+    try:
+        if data['algorithm'] == 'pplacer':
             placementJson = makePlacement(filename, proteinName, ID)
             newickJson = placementToJsonVisualisation(placementJson, ID)
-        except Exception as e:
-            return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
-        finally:
-            os.remove(getDataLocation(f'tmp/{filename}.fasta'))
-        return jsonify({'success': True, 'newick': jsonify(newickJson)}), 200, {'ContentType': 'application/json'}
-    return jsonify({'success': False, 'error': "File is not a fasta file or no data is specified!"}), 200, {'ContentType': 'application/json'}
+        else:
+            newickJson = constructNewTree(filename, proteinName, False)
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
+    finally:
+        os.remove(filename)
+    return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":
