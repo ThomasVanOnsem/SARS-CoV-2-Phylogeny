@@ -66,44 +66,34 @@ def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
 
 @app.route('/submit-data', methods=["POST"])
 def submit_data():
-    # Handle data from input fields
     data = request.form
     proteinName = data['proteinChoice']
-    ID = data['id']
-    if data['nuc-id'] or data['amino-id']:
-        file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['origin'], sequence=data['sequence'],
-                             seq_id=data['nuc-id'])
+
+    # Make a fasta file if a sequence is given
+    if data['id']:
+        ID = data['id']
+        filename = makeFastaFile(proteinName=data['proteinChoice'], origin=data['origin'], sequence=data['sequence'],
+                                 seq_id=data['id'])
+    # Save file when uploaded
     else:
-        pass
+        f = request.files['file']
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            filename = getDataLocation(f'tmp/{filename}')
+            f.save(filename)
+            ID = filename.__hash__()
+        else:
+            return jsonify({'success': False, 'error': "File is not a fasta file or no data is specified!"}), 200, {
+                'ContentType': 'application/json'}
 
     try:
-        placementJson = makePlacement(file, proteinName, ID)
+        placementJson = makePlacement(filename, proteinName, ID)
         newickJson = placementToJsonVisualisation(placementJson, ID)
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
     finally:
-        os.remove(file)
+        os.remove(filename)
     return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
-
-    # Handle data from file upload
-    files = request.files
-    if files['nuc-file'].filename:
-        f = files['nuc-file']
-    else:
-        f = files['amino-file']
-    if f and allowed_file(f.filename):
-        filename = secure_filename(f.filename)
-        filename = getDataLocation(f'tmp/{filename}')
-        f.save(filename)
-        try:
-            placementJson = makePlacement(filename, proteinName, ID)
-            newickJson = placementToJsonVisualisation(placementJson, ID)
-        except Exception as e:
-            return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
-        finally:
-            os.remove(getDataLocation(f'tmp/{filename}.fasta'))
-        return jsonify({'success': True, 'newick': jsonify(newickJson)}), 200, {'ContentType': 'application/json'}
-    return jsonify({'success': False, 'error': "File is not a fasta file or no data is specified!"}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":
