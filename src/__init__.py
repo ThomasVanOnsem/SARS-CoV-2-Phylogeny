@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
-from newick import convert_newick_json
-from tools import getDataLocation, makeTempDirectory
+from src.newick import convert_newick_json
+from src.tools import getDataLocation, makeTempDirectory
 from src.phylo.placement import makePlacement, placementToJsonVisualisation
 
 ALLOWED_EXTENSIONS = {'fasta'}

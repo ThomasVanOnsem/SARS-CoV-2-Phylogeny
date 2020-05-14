@@ -1,9 +1,9 @@
-from phylo.align import align
-from phylo.model import Samples
+from src.phylo.align import align
+from src.phylo.model import Samples
 from Bio.Phylo.Applications import FastTreeCommandline
 from Bio import SeqIO
-from tools import getDataLocation
-from phylo.placement import makeReferencePackage
+from src.tools import getDataLocation
+from src.phylo.placement import makeReferencePackage
 
 
 def constructTree(alignmentFile, treeFile, logFile, nucleotide=False):
@@ -35,7 +35,6 @@ def processNucleotideSamples(samples: Samples):
     sequences = samples.getGenomeSequences()
     constructTreeFromSequences(sequences, filename, nucleotide=True)
 
-
 def constructTreeFromSequences(sequences, filename, nucleotide=False):
     sequencesFile = getDataLocation(f'sequences/{filename}.fasta')
     SeqIO.write(sequences, sequencesFile, 'fasta')
@@ -50,5 +49,5 @@ def constructTreeFromSequences(sequences, filename, nucleotide=False):
     constructTree(alignmentFile, treeFile, logFile, nucleotide=nucleotide)
 
     print('Making reference package')
-    packageFile = getDataLocation(f'reference_packages/{filename}.refpkg')
-    makeReferencePackage(treeFile, alignmentFile, logFile, packageFile)
+    # packageFile = getDataLocation(f'reference_packages/{filename}.refpkg')
+    # makeReferencePackage(treeFile, alignmentFile, logFile, packageFile)
