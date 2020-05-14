@@ -7,7 +7,7 @@ from tools import getDataLocation, makeTempDirectory
 
 
 def makeReferencePackage(treeFile, alignmentFile, logFile, output):
-    check_call(['rm', '-r', output])
+    check_call(['rm', '-rf', output])
     cmd = f"""
             ../taxit_venv/bin/taxit create
                 -l 16s_rRNA -P {output}

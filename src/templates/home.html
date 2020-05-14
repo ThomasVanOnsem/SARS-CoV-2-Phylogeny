@@ -9,11 +9,12 @@
 <section class="section">
     <div class="columns">
         <div class="column is-half">
-                <span class="description">Choose a protein to view</span>
+                <span class="description">Choose a protein or the full genome</span>
                 <form id="submit-form-data">
                     <div class="container">
                         <div class="field select">
                             <select id="proteinChoice" name="proteinChoice" onchange="onProteinChange(event)">
+                                <option value="genome">Genome</option>
                                 <option value="envelope_protein">Envelope Protein</option>
                                 <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
                                 <option value="nucleocapsid_phosphoprotein">Nucleocapsid Phosphoprotein</option>
