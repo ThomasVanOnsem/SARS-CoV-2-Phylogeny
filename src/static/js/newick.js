@@ -3,28 +3,32 @@ function getNewick() {
     $('#newick-graph').empty();
     $('#title-protein').empty();
 
-    var height = $('#result-box').height();
-    var width = $('#result-box').width();
-
-    var draw = SVG().addTo('#newick-graph').size(width.toString(), height.toString());
-
     var proteinName = $('select#proteinChoice option:checked').val();
     var callUrl = '/data/newick/' + String(proteinName);
 
     $.ajax({
         url: callUrl,
     }).done(function( data ) {
-        var box = 24*data['leafCount'];
-        //this atleast make it viewable at a normal scale
-        if (box > 10000){
-            maxWidthHeight = 10000;
-        }
-        var viewBoxStr =  '0 0 ' + box.toString() + ' ' + box.toString();
-        draw.attr('viewBox', viewBoxStr);
-        recursiveDraw(draw, data, 0, box, 10);
+        setUpNewick(data);
     });
-    var spaceSeperatedProteinName = String(proteinName).replace(/_/g, ' ');
-    $('#title-protein').append(spaceSeperatedProteinName);
+
+}
+
+function setUpNewick(data) {
+    var height = $('#result-box').height();
+    var width = $('#result-box').width();
+    var proteinName = $('select#proteinChoice option:checked').val();
+
+    var draw = SVG().addTo('#newick-graph').size(width.toString(), height.toString());
+
+    var box = 24*data['leafCount'];
+    //This at least makes it viewable at a normal scale
+    if (box > 10000){
+        maxWidthHeight = 10000;
+    }
+    var viewBoxStr =  '0 0 ' + box.toString() + ' ' + box.toString();
+    draw.attr('viewBox', viewBoxStr);
+    recursiveDraw(draw, data, 0, box, 10);
 
     $.ajax({
         url: '/data/info/' + String(proteinName)
@@ -120,8 +124,10 @@ function showInfoVariant(node){
     $.ajax({
         url: '/data/info/protein/' + $(node).attr('id')
     }).done(function (data){
-        var nameString = '<p><span class="has-text-primary">Name:</span> ' + data['name'] + '</p>';
+        let nameString = '<p><span class="has-text-primary">Name:</span> ' + data['name'] + '</p>';
+        let origin = '<p><span class="has-text-primary">Origin:</span> ' + data['origin'] + '</p>';  //TODO origin
         $('#selectedNodeContent').append(nameString);
+        $('#selectedNodeContent').append(origin);
     });
 }
 

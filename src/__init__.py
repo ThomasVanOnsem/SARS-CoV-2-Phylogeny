@@ -5,10 +5,10 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from newick import convert_newick_json
 from tools import getDataLocation
-from src.phylo.placement import makePlacement
+from src.phylo.placement import makePlacement, placementToJsonVisualisation
 from src.phylo.fasta import parseFasta
 
-ALLOWED_EXTENSIONS = {'txt', 'fasta'}
+ALLOWED_EXTENSIONS = {'fasta'}
 
 app = Flask(__name__)
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -29,16 +29,6 @@ def getNewick(protein):
     return jsonify(newick_json)
 
 
-@app.route('/placement', methods=['POST'])
-def makePlacement():
-    # TODO unfinished
-    data = request.get_json()
-    seq = data['seq']
-    placementJson = makePlacement('surface glycoprotein', seq.strip(), 'my_protein')
-    newickJson = placementToJsonVisualisation(placementJson)
-    return jsonify(newickJson)
-
-
 @app.route("/data/info/<protein>")
 def getInfoProtein(protein):
     info = {}
@@ -56,6 +46,7 @@ def getInfoProtein(protein):
 def getInfoVariant(variant):
     info = {}
     info["name"] = variant
+    info["origin"] = ""  # TODO origin
 
     return jsonify(info)
 
@@ -75,6 +66,7 @@ def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
 
 @app.route('/submit-data', methods=["POST"])
 def submit_data():
+    # Handle data from input fields
     data = request.form
     if data['nuc-id'] or data['amino-id']:
         if data['nuc-id']:
@@ -84,13 +76,15 @@ def submit_data():
             file = makeFastaFile(proteinName=data['proteinChoice'], origin=data['amino-origin'], sequence=data['amino-sequence'],
                                  seq_id=data['amino-id'])
         try:
-            makePlacement(getDataLocation(f'tmp/{file}'))
+            placementJson = makePlacement(getDataLocation(f'tmp/{file}'))
+            newickJson = placementToJsonVisualisation(placementJson)
         except Exception as e:
             os.remove(getDataLocation(f'tmp/{file}'))
             return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
         os.remove(getDataLocation(f'tmp/{file}'))
-        return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
+        return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
 
+    # Handle data from file upload
     files = request.files
     if files['nuc-file'].filename:
         f = files['nuc-file']
@@ -100,12 +94,14 @@ def submit_data():
         filename = secure_filename(f.filename)
         f.save(getDataLocation(f'tmp/'), filename)
         try:
-            makePlacement(getDataLocation(f'tmp/{filename}.fasta'))
+            placementJson = makePlacement(getDataLocation(f'tmp/{filename}.fasta'))
+            newickJson = placementToJsonVisualisation(placementJson)
         except Exception as e:
             os.remove(getDataLocation(f'tmp/{filename}.fasta'))
             return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
         os.remove(getDataLocation(f'tmp/{filename}.fasta'))
-    return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
+        return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
+    return jsonify({'success': False, 'error': "File is not a fasta file or no data is specified!"}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":

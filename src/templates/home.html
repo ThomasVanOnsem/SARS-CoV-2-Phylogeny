@@ -236,7 +236,8 @@
                 error_div.style.display = '';
                 return;
             }
-            getNewick();
+            let newickJson = data['newick'];
+            setUpNewick(newickJson);
         });
     });
 </script>
