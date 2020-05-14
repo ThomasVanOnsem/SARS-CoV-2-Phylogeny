@@ -1,7 +1,7 @@
 {
     "files": {
-        "aln_fasta": "aligned.fasta", 
-        "phylo_model": "phylo_modelkTm8sG.json", 
+        "aln_fasta": "genome.fasta", 
+        "phylo_model": "phylo_model8sB_KW.json", 
         "tree": "genome.newick", 
         "tree_stats": "genome.log"
     }, 
@@ -11,15 +11,15 @@
         "Loaded initial files into empty refpkg"
     ], 
     "metadata": {
-        "create_date": "2020-05-14 23:30:24", 
+        "create_date": "2020-05-15 00:15:09", 
         "format_version": "1.1", 
         "locus": "16s_rRNA"
     }, 
     "rollforward": null, 
     "md5": {
-        "aln_fasta": "1a843e58016751dccb31a15d661b729a", 
+        "aln_fasta": "d0a2cc62057c00757bddeb82fb028ac3", 
         "phylo_model": "2f52a1a4dcf54d197abcb17ce096a58e", 
-        "tree": "e07d7016570def3a0be529bacd818519", 
-        "tree_stats": "9fad0bcad40a161096813d93151f3268"
+        "tree": "bfe7f60fea755f687c6c30e917dbdb07", 
+        "tree_stats": "3db28bfe69f7bdbf697f3da6dacdc771"
     }
 }

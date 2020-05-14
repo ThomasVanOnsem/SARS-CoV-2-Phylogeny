@@ -1,20 +1,16 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for
 import os
+import json
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from src.newick import convert_newick_json
-from src.phylo.phylo import constructTree, constructNewTree
+from src.phylo.phylo import constructNewTree, saveLocations
 from src.tools import getDataLocation, makeTempDirectory
 from src.phylo.placement import makePlacement, placementToJsonVisualisation
-import json
 
 ALLOWED_EXTENSIONS = {'fasta'}
 
 app = Flask(__name__)
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-app.config['UPLOAD_FOLDER'] = '../data/'
-app.config['RESULT_FOLDER'] = os.path.join(THIS_FOLDER, 'static/results/phylo/')
-app.config['EXPLANATION_FOLDER'] = os.path.join(THIS_FOLDER, 'static/protein_explanations/')
 
 
 @app.route('/')
@@ -31,13 +27,13 @@ def getNewick(protein):
 
 @app.route("/data/info/<protein>")
 def getInfoProtein(protein):
-    info = {}
+    info = {
+        'explanation': ''
+    }
 
-    file = open(app.config["EXPLANATION_FOLDER"] + protein + '.txt', 'r')
-    if file:
-        info["explanation"] = file.readline()
-    else:
-        info["explanation"] = ""
+    filename = getDataLocation(f'protein_explanations/{protein}.txt')
+    with open(filename) as file:
+        info['explanation'] = file.readline()
 
     return jsonify(info)
 
@@ -75,6 +71,7 @@ def makeFastaFile(proteinName: str, origin: str, sequence: str, seq_id: str):
 def submit_data():
     data = request.form
     proteinName = data['proteinChoice']
+    isGenome = proteinName == 'genome'
 
     # Make a fasta file if a sequence is given
     if data['id']:
@@ -98,7 +95,8 @@ def submit_data():
             placementJson = makePlacement(filename, proteinName, ID)
             newickJson = placementToJsonVisualisation(placementJson, ID)
         else:
-            newickJson = constructNewTree(filename, proteinName, False)
+            newickJson = constructNewTree(filename, proteinName, isGenome)
+            saveLocations(filename, proteinName)
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 200, {'ContentType': 'application/json'}
     finally:

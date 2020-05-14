@@ -1,3 +1,5 @@
+import json
+
 from src.phylo.align import align, alignOne
 from src.phylo.model import Samples
 from Bio.Phylo.Applications import FastTreeCommandline
@@ -87,6 +89,21 @@ def processNucleotideSamples(samples: Samples):
     filename = 'genomes'
     sequences = samples.getGenomeSequences()
     constructTreeFromSequences(sequences, filename, nucleotide=True)
+
+
+def saveLocations(sequenceFile, proteinName):
+    sequences = SeqIO.parse(sequenceFile, 'fasta')
+    with open(getDataLocation('locations/proteins.json')) as file:
+        locations = json.load(file)
+    for seq in sequences:
+        ID = str(seq.id)
+        if '|' in ID:
+            ID = ID[: ID.find('|')]
+        origin = str(seq.description).split('|')[-1]
+        locations[proteinName][ID] = origin
+    with open(getDataLocation('locations/proteins.json'), 'w') as file:
+        json.dump(locations, file)
+
 
 def constructTreeFromSequences(sequences, filename, nucleotide=False):
     sequencesFile = getDataLocation(f'sequences/{filename}.fasta')

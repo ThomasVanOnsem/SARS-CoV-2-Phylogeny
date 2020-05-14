@@ -2,6 +2,7 @@ from Bio import SeqIO
 from src.phylo.model import Samples, Protein
 import json
 
+
 def collectLocations(source, target):
     print('collecting locations')
     locations = dict()
@@ -25,6 +26,7 @@ def collectLocations(source, target):
     res = open(target, 'w+')
     res.write(json.dumps(locations))
     res.close()
+
 
 def parseFasta(name, nucleotides=False):
     """

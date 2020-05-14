@@ -14,9 +14,10 @@
                     <div class="container">
                         <div class="field select">
                             <select id="proteinChoice" name="proteinChoice" onchange="onProteinChange(event)">
+                                <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
+                                <option value="surface_glycoprotein">Surface Glycoprotein (spike)</option>
                                 <option value="genome">Genome</option>
                                 <option value="envelope_protein">Envelope Protein</option>
-                                <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
                                 <option value="nucleocapsid_phosphoprotein">Nucleocapsid Phosphoprotein</option>
                                 <option value="orf1a_polyprotein">Orf1a Polyprotein</option>
                                 <option value="orf1ab_polyprotein">Orf1ab Polyprotein</option>
@@ -26,7 +27,6 @@
                                 <option value="orf7b">Orf7b Protein</option>
                                 <option value="orf8_protein">Orf8 Protein</option>
                                 <option value="orf10_protein">Orf10 Protein</option>
-                                <option value="surface_glycoprotein">Surface Glycoprotein</option>
                             </select>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                     <div id="add-data" class="" style="display: none;">
                         <hr>
                         <div>
-                            <p class="description">Add your own sequence to the tree:</p>
+                            <p class="description">Add your own sequence to the tree (expects amino acids for the proteins and nucleotides for the genome)</p>
                             <br>
                             <div class="columns">
                                 <div class="column is-one-third">
@@ -54,7 +54,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <p class="description">Or upload a fasta file:</p>
+                            <p class="description">Or upload a fasta file (with location as the last item in the description)</p>
                             <br>
                             <div class="is-desktop">
                                 <div id="upload-zone" class="">

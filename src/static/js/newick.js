@@ -83,7 +83,7 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
             endDot.attr('fill', 'red')
         }
         if (node['added']) {
-            endDot.attr('fill', 'green')
+            endDot.attr('fill', 'blue')
         }
     }
 
