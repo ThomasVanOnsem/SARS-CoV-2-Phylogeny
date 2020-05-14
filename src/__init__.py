@@ -6,6 +6,7 @@ from src.newick import convert_newick_json
 from src.phylo.phylo import constructTree, constructNewTree
 from src.tools import getDataLocation, makeTempDirectory
 from src.phylo.placement import makePlacement, placementToJsonVisualisation
+import json
 
 ALLOWED_EXTENSIONS = {'fasta'}
 
@@ -43,9 +44,14 @@ def getInfoProtein(protein):
 
 @app.route("/data/info/protein/<variant>")
 def getInfoVariant(variant):
+    file = getDataLocation(f"locations/proteins.json")
+    locationsf = open(file, 'r')
+    locations = json.loads(locationsf.read())
     info = {}
+    for protein in locations:
+        if variant in locations[protein]:
+            info["origin"] = locations[protein][variant]
     info["name"] = variant
-    info["origin"] = ""  # TODO origin
 
     return jsonify(info)
 
