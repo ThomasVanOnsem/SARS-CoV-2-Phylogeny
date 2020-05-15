@@ -15,6 +15,7 @@
         <div class="subtitle is-3">
             University of Antwerp
         </div>
+
         <div class="subtitle">
             <a class="button" href="https://github.com/ThomasVanOnsem/SARS-CoV-2-Phylogeny">
                 <span class="file-icon"><i class="fab fa-github"></i></span>
@@ -22,8 +23,10 @@
             </a>
         </div>
         <div class="content is-medium">
-            This tool allows you to see the phylogenetic tree of each part of the Covid19 virus. <br>
-            You can add your own sequences by using a fast placement or a rebuild of the tree.
+            This tool allows you to see the phylogenetic tree of each part of the virus. <br>
+            You can add your own sequences by using a fast placement or a rebuild of the tree. <br>
+            By clicking on a node, you can find out about the origin, which makes it possible to guess the origin of a new sample. <br>
+            <i>Thomas Van Onsem, Miguel Dagrain, Astrid Lamens and Max Van Houcke</i>
         </div>
         <br>
         <div class="container">
@@ -78,7 +81,7 @@
                             <div class="control">
                                 <div id="algorithm-input" class="buttons has-addons">
                                     <button id="choose-pplacer" class="button toggle-button is-primary is-selected"
-                                            onclick="triggerToggleAlgorithmType(event)">Fast placement (using Pplacer)
+                                            onclick="triggerToggleAlgorithmType(event)">Fast placement (using pplacer)
                                         <i
                                                 id="pplacer-info" class="far fa-question-circle info-icon"
                                                 style="margin-left: 0.5rem;"></i></button>

@@ -94,12 +94,9 @@ function setupFileInput() {
 
 function setupPopovers() {
 	tippy('#choose-pplacer',{
-        content: 'Run a fast placement algorithm.'
+        content: 'Makes a temporary and quick placement using pplacer, which includes a likelihood.'
     });
     tippy('#choose-fasttree',{
-        content: 'Completely rebuild the phylo tree with FastTree.'
-    });
-    tippy('#newick-info',{
-        content: 'Interactive Newick representation of chosen protein.'
+        content: 'Permanently adds your sequences to the tree by using FastTree, takes longer but has more accurate results'
     });
 }
