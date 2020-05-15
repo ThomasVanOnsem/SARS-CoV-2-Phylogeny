@@ -7,128 +7,147 @@
 
 {% block page %}
 <section class="section">
-    <div class="columns">
-        <div class="column is-half">
-                <span class="description">Choose a protein or the full genome</span>
+    <div class="has-text-centered">
+        <div class="title is-1">
+            SARS-CoV-2 <img class="rotate" style="height: 0.8em" src="static/virus.png"> <br>
+            Phylogenetic Analysis
+        </div>
+        <div class="subtitle is-3">
+            University of Antwerp
+        </div>
+        <div class="subtitle">
+            <a class="button" href="https://github.com/ThomasVanOnsem/SARS-CoV-2-Phylogeny">
+                <span class="file-icon"><i class="fab fa-github"></i></span>
+                <span>Project</span>
+            </a>
+        </div>
+        <div class="content is-medium">
+            This tool allows you to see the phylogenetic tree of each part of the Covid19 virus. <br>
+            You can add your own sequences by using a fast placement or a rebuild of the tree.
+        </div>
+        <br>
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
                 <form id="submit-form-data">
-                    <div class="container">
-                        <div class="field select">
-                            <select id="proteinChoice" name="proteinChoice" onchange="onProteinChange(event)">
-                                <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
-                                <option value="surface_glycoprotein">Surface Glycoprotein (spike)</option>
-                                <option value="genome">Genome</option>
-                                <option value="envelope_protein">Envelope Protein</option>
-                                <option value="nucleocapsid_phosphoprotein">Nucleocapsid Phosphoprotein</option>
-                                <option value="orf1a_polyprotein">Orf1a Polyprotein</option>
-                                <option value="orf1ab_polyprotein">Orf1ab Polyprotein</option>
-                                <option value="orf3a_protein">Orf3a Protein</option>
-                                <option value="orf6_protein">Orf6 Protein</option>
-                                <option value="orf7a_protein">Orf7a Protein</option>
-                                <option value="orf7b">Orf7b Protein</option>
-                                <option value="orf8_protein">Orf8 Protein</option>
-                                <option value="orf10_protein">Orf10 Protein</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="button is-white" onclick="toggleSubmissionForm()" style="margin-top: 0.8rem;" type="button">
-                        <span><i class="fas fa-plus" style="margin-right: 0.6rem;"></i>Add data to tree</span>
+                    <button class="button is-white" onclick="toggleSubmissionForm()"
+                            type="button">
+                        <span><i class="fas fa-plus" style="margin-right: 0.6rem;"></i>Add data to the tree below</span>
                     </button>
-                    <div id="add-data" class="" style="display: none;">
-                        <hr>
+                    <div id="add-data" class="" style="display: none; margin-top: 1rem">
                         <div>
-                            <p class="description">Add your own sequence to the tree (expects amino acids for the proteins and nucleotides for the genome)</p>
-                            <br>
                             <div class="columns">
-                                <div class="column is-one-third">
-                                    <input id="nucleo-id" class="input" type="text" placeholder="Identifier e.g. NC_045512 (required)" name="id">
+                                <div class="column is-half">
+                                    <input id="nucleo-id" class="input" type="text"
+                                           placeholder="Identifier e.g. NC_045512" name="id">
                                 </div>
-                                <div class="column is-one-third">
-                                    <input id="nucleo-origin" class="input" type="text" placeholder="Origin of sample (not required)" name="origin">
+                                <div class="column is-half">
+                                    <input id="nucleo-origin" class="input" type="text"
+                                           placeholder="Origin of sample (optional)" name="origin">
                                 </div>
                             </div>
-                            <div class="field">
-                                <div class="control is-medium">
+                            <div class="field columns is-vcentered">
+                                <div class="column is-8 control is-small">
                                     <label>
-                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;" placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA (required)" name="sequence" rows="3"></textarea>
+                                        <textarea id="nucleo-seq" class="textarea" style="height:130px;"
+                                                  placeholder="Sequence Input e.g. CCTTCTCTTGCCACTGTA&#10;Expects amino acids for the proteins and nucleotides for the genome"
+                                                  name="sequence" rows="3"></textarea>
                                     </label>
                                 </div>
-                            </div>
-                            <p class="description">Or upload a fasta file (with location as the last item in the description)</p>
-                            <br>
-                            <div class="is-desktop">
-                                <div id="upload-zone" class="">
-                                    <div class="file has-name">
-                                        <label class="file-label">
-                                            <input id="file-input-nuc" class="file-input" type="file" name="file">
-                                            <span class="file-cta">
+                                <div class="column is-1">
+                                    <span>Or</span>
+                                </div>
+                                <div class="column is-3 is-desktop">
+                                    <div id="upload-zone" class="">
+                                        <div class="file has-name is-boxed is-small">
+                                            <label class="file-label">
+                                                <input id="file-input" class="file-input" type="file" name="file">
+                                                <span class="file-cta">
                                                 <span class="file-icon"><i class="fas fa-upload"></i></span>
-                                                <span class="file-label">Choose a file…</span>
+                                                <span class="file-label">Upload a fasta file</span>
                                             </span>
-                                            <span class="file-name"></span>
-                                        </label>
+                                                <span class="file-name"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="control">
-                            <div id="algorithm-input" class="buttons has-addons">
-                                <button id="choose-pplacer" class="button toggle-button is-primary is-selected" onclick="triggerToggleAlgorithmType(event)">Fast placement (using Pplacer) <i id="pplacer-info" class="far fa-question-circle info-icon" style="margin-left: 0.5rem;"></i></button>
-                                <button id="choose-fasttree" class="button toggle-button" onclick="triggerToggleAlgorithmType(event)">Rebuild Tree (using FastTree) <i id="fasttree-info" class="far fa-question-circle info-icon" style="margin-left: 0.5rem;"></i></button>
+                        <br>
+                        <div class="field  has-addons has-addons-centered">
+                            <div class="control">
+                                <div id="algorithm-input" class="buttons has-addons">
+                                    <button id="choose-pplacer" class="button toggle-button is-primary is-selected"
+                                            onclick="triggerToggleAlgorithmType(event)">Fast placement (using Pplacer)
+                                        <i
+                                                id="pplacer-info" class="far fa-question-circle info-icon"
+                                                style="margin-left: 0.5rem;"></i></button>
+                                    <button id="choose-fasttree" class="button toggle-button"
+                                            onclick="triggerToggleAlgorithmType(event)">Rebuild Tree (using FastTree) <i
+                                            id="fasttree-info" class="far fa-question-circle info-icon"
+                                            style="margin-left: 0.5rem;"></i></button>
+                                </div>
                             </div>
                         </div>
                         <br>
-                        <div id="error-field" class="notification is-danger" style="display: none">
-
-                        </div>
-                        <div class="field">
+                        <div class="field has-addons has-addons-centered">
                             <p class="control">
-                                <button id="submit-btn" class="button is-primary is-rounded" type="submit" disabled>Process</button>
+                                <button id="submit-btn" class="button is-primary is-rounded" type="submit" disabled>
+                                    Process
+                                </button>
                             </p>
                         </div>
+
                     </div>
                 </form>
+                    <div id="error-field" class="notification is-danger" style="display: none; margin-top: 10px"></div>
+                    <div id="success-field" class="notification is-success" style="display: none; margin-top: 10px"></div>
+                </div>
+            </div>
+
+            </div>
+
+    </div>
+
+    <hr>
+    <div class="has-text-left" id="result-box" style="position: relative; width:100%; height: 60vh;">
+        <div id="newick-view">
+            <div id="newick-graph"></div>
         </div>
-
-        <div class="column is-half">
-            <div class="columns">
-                <div class="column is-half">
-                    <div class="card">
-                        <header class="card-header has-background-primary">
-                            <p class="card-header-title">Selected Node</p>
-                        </header>
-                        <div class="card-content">
-                            <div id="selectedNodeContent" class="content"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-half">
-                    <div class="card" style="width: 100%">
-                        <header class="card-header has-background-primary">
-                            <p class="card-header-title">Short Description Protein</p>
-                        </header>
-                        <div class="card-content info-container" style="width: 100%">
-                            <div class="content"><p style="width: 100%" id="protein-explanation"></p></div>
-                        </div>
-                    </div>
+        <div style="width: 20%; position: absolute; right: 5%; top: 5%;">
+            <div class="card">
+                <header class="card-header has-background-primary">
+                    <p class="card-header-title">Protein Info</p>
+                </header>
+                <div class="card-content info-container" style="width: 100%">
+                    <div class="content"><p style="width: 100%" id="protein-explanation"></p></div>
                 </div>
             </div>
-
-            <div class="columns is-centered">
-                <div class="column is-11">
-                    <div id="result-box" style="width:800px;height:480px;">
-                        <div id="newick-view">
-                            <div id="newick-graph"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-1">
-                    <button id="newick-info" class="info-button" type="button"><i class="far fa-question-circle info-icon"></i></button>
+            <div id="selectedNodeCard" class="card" style="margin-top: 5%; display: none;">
+                <header class="card-header has-background-primary">
+                    <p class="card-header-title">Selected Node</p>
+                </header>
+                <div class="card-content">
+                    <div id="selectedNodeContent" class="content"></div>
                 </div>
             </div>
-
-
+        </div>
+        <div class="field select" style="position: absolute; left: 5%; top: 5%;">
+            <select id="proteinChoice" name="proteinChoice" onchange="onProteinChange(event)">
+                <option value="membrane_glycoprotein">Membrane Glycoprotein</option>
+                <option value="surface_glycoprotein">Surface Glycoprotein (spike)</option>
+                <option value="genome">Genome</option>
+                <option value="envelope_protein">Envelope Protein</option>
+                <option value="nucleocapsid_phosphoprotein">Nucleocapsid Phosphoprotein</option>
+                <option value="orf1a_polyprotein">Orf1a Polyprotein</option>
+                <option value="orf1ab_polyprotein">Orf1ab Polyprotein</option>
+                <option value="orf3a_protein">Orf3a Protein</option>
+                <option value="orf6_protein">Orf6 Protein</option>
+                <option value="orf7a_protein">Orf7a Protein</option>
+                <option value="orf7b">Orf7b Protein</option>
+                <option value="orf8_protein">Orf8 Protein</option>
+                <option value="orf10_protein">Orf10 Protein</option>
+            </select>
         </div>
     </div>
 </section>

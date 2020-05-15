@@ -14,8 +14,8 @@ function fetchTree() {
 }
 
 function setUpNewick(data) {
-    var height = $('#result-box').height();
-    var width = $('#result-box').width();
+    var height = $('#result-box').height() - 20;
+    var width = $('#result-box').width() - 20;
     var proteinName = $('select#proteinChoice option:checked').val();
 
     $("#newick-graph").empty();
@@ -28,7 +28,7 @@ function setUpNewick(data) {
     }
     var viewBoxStr =  '0 0 ' + box.toString() + ' ' + box.toString();
     draw.attr('viewBox', viewBoxStr);
-    recursiveDraw(draw, data, 0, box, 10);
+    recursiveDraw(draw, data, 40, box, 10);
 
     $.ajax({
         url: '/data/info/' + String(proteinName)
@@ -75,15 +75,18 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
     if (node['name']) {
         var endDot = draw.circle(10);
         endDot.move(xPointsVer-5, endLine-5);
-        endDot.attr('id', node['name'])
-        endDot.attr('onmouseover', 'startHoveringNode(this)')
-        endDot.attr('onmouseout', 'stopHoveringNode(this)')
-        endDot.attr('onclick', 'showInfoVariant(this)')
+        endDot.attr('id', node['name']);
+        endDot.attr('onmouseover', 'startHoveringNode(this)');
+        endDot.attr('onmouseout', 'stopHoveringNode(this)');
+        endDot.attr('onclick', 'showInfoVariant(this)');
         if (node['placement']) {
-            endDot.attr('fill', 'red')
+            endDot.attr('placement-likelihood', node['likelihood']);
+            endDot.attr('fill', 'red');
+            endDot.addClass("is-red");
         }
         if (node['added']) {
-            endDot.attr('fill', 'blue')
+            endDot.attr('fill', 'red');
+            endDot.addClass("is-red");
         }
     }
 
@@ -118,8 +121,10 @@ function stopHoveringNode(node){
 
 
 function showInfoVariant(node){
-    $('#selectedNodeContent').empty();
-    $('.data-selected').removeClass('data-selected').attr({fill: '#000000'});
+    let oldSelected = $('.data-selected').removeClass('data-selected').attr({fill: '#000000'});
+    if (oldSelected.hasClass("is-red")) {
+        oldSelected.attr({fill: "red"})
+    }
     $(node).addClass('data-selected');
     $(node).attr({
         fill: '#00D1B2',
@@ -129,9 +134,16 @@ function showInfoVariant(node){
         url: '/data/info/protein/' + $(node).attr('id')
     }).done(function (data){
         let nameString = '<p><span class="has-text-primary">Name:</span> ' + data['name'] + '</p>';
-        let origin = '<p><span class="has-text-primary">Origin:</span> ' + data['origin'] + '</p>';  //TODO origin
-        $('#selectedNodeContent').append(nameString);
-        $('#selectedNodeContent').append(origin);
+        let origin = '<p><span class="has-text-primary">Origin:</span> ' + data['origin'] + '</p>';
+        let likelihood = $(node).attr('placement-likelihood');
+        let likelihoodString = '';
+        if (likelihood) {
+            likelihood = parseFloat(likelihood).toFixed(2);
+            likelihoodString = `<p><span class="has-text-primary">Likelihood of placement near this node is ${likelihood}</span> `
+        }
+
+        $('#selectedNodeContent').html(nameString + origin + likelihoodString);
+        $('#selectedNodeCard').show();
     });
 }
 

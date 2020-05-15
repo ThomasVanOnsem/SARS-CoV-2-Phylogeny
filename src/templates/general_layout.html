@@ -16,34 +16,9 @@
     {% block scriptIncludes %}{% endblock %}
   </head>
   <body class="main">
-    <div class="container-fluid">
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-          <a class="navbar-item">
-            <img src="{{ url_for('static', filename='virus.png') }}">
-          </a>
-
-          <div class="navbar-menu">
-            <a class="navbar-item" href="{{ url_for('homepage') }}">
-                <span class="file-icon"><i class="fas fa-home"></i></span>
-                <span>Home</span>
-            </a>
-            <a class="navbar-item" href="https://github.com/ThomasVanOnsem/SARS-CoV-2-Phylogeny">
-                <span class="file-icon"><i class="fab fa-github"></i></span>
-                <span>Project</span>
-            </a>
-          </div>
-
-      </nav>
-    </div>
-
     {% block page %}{% endblock %}
-    </body>
-    <footer class="footer" style="z-index:10">
-        <div class="content has-text-centered">
-            <p>© Universiteit Antwerpen</p>
-            <p class="description">Astrid Lamens, Max Van Houcke, Miguel Dagrain, Thomas Van Onsem</p>
-        </div>
-    </footer>
+  </body>
+
 </html>
 
 {% block scripts %}

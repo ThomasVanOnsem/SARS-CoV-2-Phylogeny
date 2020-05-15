@@ -9,7 +9,7 @@ $(window).ready(function() {
 
 function onProteinChange(event) {
 	event.preventDefault();
-	$('#selectedNodeContent').empty();
+	$('#selectedNodeCard').hide();
 	fetchTree();
 }
 
@@ -47,13 +47,14 @@ function setupFormSubmission() {
             return;
         }
         e.preventDefault();
-        document.getElementById("submit-btn").classList.add("is-loading")
+        document.getElementById("submit-btn").classList.add("is-loading");
         let formData = new FormData(this);
         if ($("#choose-pplacer").hasClass("is-selected")) {
             formData.append("algorithm", "pplacer");
         } else {
             formData.append("algorithm", "fasttree");
         }
+        formData.append('proteinChoice', $("#proteinChoice").val());
 
         $.ajax({
             url: '/submit-data',
@@ -64,12 +65,17 @@ function setupFormSubmission() {
             processData: false
         }).done(function (data) {
             document.getElementById("submit-btn").classList.remove("is-loading");
+            let errorBar = $("#error-field");
+            let successBar = $("#success-field");
             if(!data["success"]){
-                let error_div = document.getElementById("error-field");
-                error_div.innerHTML = data['error'];
-                error_div.style.display = '';
+                successBar.hide();
+                errorBar.show();
+                errorBar.text(data['error']);
                 return;
             }
+            errorBar.hide();
+            $("#add-data").hide();
+            successBar.show().text("Success! Location of your sequences are in red");
             let newickJson = data['newick'];
             setUpNewick(newickJson);
         });
