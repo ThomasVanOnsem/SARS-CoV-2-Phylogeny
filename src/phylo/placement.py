@@ -1,29 +1,26 @@
 import json
 import os
 from subprocess import check_call
+
+from src.phylo.phylo import getIDsFromFastaFile
 from src.newick import convert_newick_json
 from src.phylo.align import alignOne
 from src.tools import getDataLocation, makeTempDirectory
-
-
-def makeReferencePackage(treeFile, alignmentFile, logFile, output):
-    check_call(['rm', '-rf', output])
-    cmd = f"""
-            taxit_venv/bin/taxit create
-                -l 16s_rRNA -P {output}
-                --aln-fasta {alignmentFile}
-                --tree-stats {logFile} 
-                --tree-file {treeFile}
-    """
-    check_call(cmd.split())
 
 
 def makePlacement(fastaFile: str, proteinName: str, ID: str):
     proteinName = proteinName.replace(' ', '_')
     makeTempDirectory()
 
-    # Align the sequence against the reference alignment
     referenceAlignmentFile = getDataLocation(f'alignments/{proteinName}.fasta')
+    existingIDs = getIDsFromFastaFile(referenceAlignmentFile)
+    newIDs = getIDsFromFastaFile(fastaFile)
+
+    for ID in newIDs:
+        if ID in existingIDs:
+            raise Exception(f"ID {ID} already exists, please pick another one")
+
+    # Align the sequence against the reference alignment
     mergedAlignmentFile = getDataLocation(f'tmp/merged_{ID}.fasta')
     alignOne(fastaFile, referenceAlignmentFile, mergedAlignmentFile)
 

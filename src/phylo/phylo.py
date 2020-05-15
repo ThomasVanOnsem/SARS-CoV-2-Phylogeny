@@ -1,4 +1,5 @@
 import json
+from subprocess import check_call
 
 from src.phylo.align import align, alignOne
 from src.phylo.model import Samples
@@ -6,7 +7,6 @@ from Bio.Phylo.Applications import FastTreeCommandline
 from Bio import SeqIO
 from src.newick import convert_newick_json
 from src.tools import getDataLocation
-from src.phylo.placement import makeReferencePackage
 
 
 def constructTree(alignmentFile, treeFile, logFile, nucleotide=False):
@@ -18,6 +18,18 @@ def constructTree(alignmentFile, treeFile, logFile, nucleotide=False):
     else:
         fastTreeCline = FastTreeCommandline(input=alignmentFile, log=logFile, out=treeFile)
     fastTreeCline()
+
+
+def makeReferencePackage(treeFile, alignmentFile, logFile, output):
+    check_call(['rm', '-rf', output])
+    cmd = f"""
+            taxit_venv/bin/taxit create
+                -l 16s_rRNA -P {output}
+                --aln-fasta {alignmentFile}
+                --tree-stats {logFile} 
+                --tree-file {treeFile}
+    """
+    check_call(cmd.split())
 
 
 def constructNewTree(newSequencesFile, proteinName, nucleotide=False):

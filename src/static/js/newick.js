@@ -72,7 +72,7 @@ function recursiveDraw(draw, node, heightBegin, heightEnd, lengthHorLine) {
     line1.stroke({width: 2, color: '#000000'});
 
     //only leaves have names
-    if (node['name']) {
+    if (node['name'] || node['placement'] || node['added']) {
         var endDot = draw.circle(10);
         endDot.move(xPointsVer-5, endLine-5);
         endDot.attr('id', node['name']);
