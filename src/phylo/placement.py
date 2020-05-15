@@ -9,7 +9,7 @@ from src.tools import getDataLocation, makeTempDirectory
 def makeReferencePackage(treeFile, alignmentFile, logFile, output):
     check_call(['rm', '-rf', output])
     cmd = f"""
-            ../taxit_venv/bin/taxit create
+            taxit_venv/bin/taxit create
                 -l 16s_rRNA -P {output}
                 --aln-fasta {alignmentFile}
                 --tree-stats {logFile} 
@@ -32,7 +32,7 @@ def makePlacement(fastaFile: str, proteinName: str, ID: str):
     placementFile = getDataLocation(f'tmp/{ID.__hash__()}.jplace')
     # To prevent crash in pplacer
     os.environ['LANG'] = '/usr/lib/locale/en_US'
-    cmd = f'../lib/pplacer -o {placementFile} -c {packageFile} {mergedAlignmentFile}'
+    cmd = f'lib/pplacer -o {placementFile} -c {packageFile} {mergedAlignmentFile}'
     check_call(cmd, shell=True)
 
     with open(placementFile) as file:

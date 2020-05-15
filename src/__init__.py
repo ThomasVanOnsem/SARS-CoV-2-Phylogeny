@@ -102,7 +102,3 @@ def submit_data():
     finally:
         os.remove(filename)
     return jsonify({'success': True, 'newick': newickJson}), 200, {'ContentType': 'application/json'}
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

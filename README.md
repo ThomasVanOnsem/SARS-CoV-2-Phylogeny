@@ -28,6 +28,11 @@ pip install taxtastic
 
 ## Run
 
+To run the site
+```
+python3 run.py
+```
+
 
 #### Troubleshooting
 
