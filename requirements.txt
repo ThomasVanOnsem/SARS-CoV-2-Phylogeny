@@ -1,4 +1,4 @@
-flask==1.1.2
+flask==2.3.2
 biopython==1.76
 cycler==0.10.0
 kiwisolver==1.2.0
